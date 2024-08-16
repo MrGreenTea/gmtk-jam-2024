@@ -1,13 +1,16 @@
-[gd_scene load_steps=10 format=3 uid="uid://osmkqqe7spxt"]
+[gd_scene load_steps=16 format=3 uid="uid://osmkqqe7spxt"]
 
 [ext_resource type="Sky" uid="uid://cbbdl23q60wak" path="res://addons/ThirdPersonTemplate/Environments/SkyBox.res" id="2_vp21c"]
-[ext_resource type="Material" uid="uid://bly25nr0aqsv3" path="res://addons/ThirdPersonTemplate/Environments/Materials/BlueGrid.material" id="3_anjpt"]
 [ext_resource type="Material" uid="uid://c1u020xb37y6n" path="res://addons/ThirdPersonTemplate/Environments/Materials/Blue.material" id="3_ugxud"]
 [ext_resource type="Material" uid="uid://d3up41bo0vjj0" path="res://addons/ThirdPersonTemplate/Environments/Materials/OrangeGrid.material" id="4_kii6k"]
+[ext_resource type="Shader" path="res://outline.gdshader" id="5_smt3s"]
 [ext_resource type="Material" uid="uid://ddpgp1pyklffr" path="res://addons/ThirdPersonTemplate/Environments/Materials/GreenGrid.material" id="6_5rtke"]
 [ext_resource type="Material" uid="uid://bquocw2a8n271" path="res://addons/ThirdPersonTemplate/Environments/Materials/GreyGrid.material" id="6_7xeo2"]
+[ext_resource type="Shader" path="res://cel-shader-base.gdshader" id="6_v1qe5"]
+[ext_resource type="Texture2D" uid="uid://b3itydmnw8lm3" path="res://addons/ThirdPersonTemplate/Environments/Textures/Grid_01_BaseMap.png" id="7_wkldu"]
 [ext_resource type="Material" uid="uid://cpk3jtowelhgh" path="res://addons/ThirdPersonTemplate/Environments/Materials/PingkGrid.material" id="7_xstjq"]
 [ext_resource type="PackedScene" uid="uid://bujr5gkm2kok1" path="res://player/player.tscn" id="8_githm"]
+[ext_resource type="Material" uid="uid://di64vyjqflky1" path="res://level/ground_material.tres" id="9_8qkgq"]
 
 [sub_resource type="Environment" id="Environment_qyvd4"]
 background_mode = 2
@@ -17,6 +20,32 @@ ssao_enabled = true
 sdfgi_enabled = true
 adjustment_enabled = true
 adjustment_saturation = 1.15
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_p1wgh"]
+render_priority = 0
+shader = ExtResource("5_smt3s")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_vbcgd"]
+render_priority = 0
+next_pass = SubResource("ShaderMaterial_p1wgh")
+shader = ExtResource("6_v1qe5")
+shader_parameter/color = Color(0.113725, 0.6, 0.843137, 1)
+shader_parameter/specular = Color(0.3, 0.3, 0.3, 0.5)
+shader_parameter/fresnel = Color(0.2, 0.2, 0.2, 0.3)
+shader_parameter/base_texture = ExtResource("7_wkldu")
+shader_parameter/uv_scale = Vector2(5, 5)
+shader_parameter/uv_offset = Vector2(0, 0)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_oy0tf"]
+render_priority = 0
+next_pass = SubResource("ShaderMaterial_p1wgh")
+shader = ExtResource("6_v1qe5")
+shader_parameter/color = Color(1, 0.793167, 0.27, 1)
+shader_parameter/specular = Color(0.3, 0.3, 0.3, 0.5)
+shader_parameter/fresnel = Color(0.2, 0.2, 0.2, 0.3)
+shader_parameter/base_texture = ExtResource("7_wkldu")
+shader_parameter/uv_scale = Vector2(2, 2)
+shader_parameter/uv_offset = Vector2(0, 0)
 
 [node name="Scene" type="Node3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0815773, -1.43051e-06, 0.163605)
@@ -39,7 +68,7 @@ material = ExtResource("3_ugxud")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.14482, 0)
 use_collision = true
 size = Vector3(47.5872, 0.1, 47.791)
-material = ExtResource("3_anjpt")
+material = SubResource("ShaderMaterial_vbcgd")
 
 [node name="CSGBox3D2" type="CSGBox3D" parent="Level"]
 transform = Transform3D(0.833182, 0, 0.552999, 0, 1, 0, -0.552999, 0, 0.833182, 16.5416, 3.19482, -15.014)
@@ -51,7 +80,7 @@ material = ExtResource("4_kii6k")
 transform = Transform3D(-0.318513, 0, 0.947919, 0, 1, 0, -0.947919, 0, -0.318513, 0.541599, 13.1948, 3.986)
 use_collision = true
 size = Vector3(4, 6, 8)
-material = ExtResource("4_kii6k")
+material = SubResource("ShaderMaterial_oy0tf")
 
 [node name="CSGBox3D3" type="CSGBox3D" parent="Level"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9, 2.19482, -6.9983)
@@ -95,7 +124,7 @@ material = ExtResource("7_xstjq")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.19482, 4)
 use_collision = true
 size = Vector3(24, 10, 16)
-material = ExtResource("6_7xeo2")
+material = ExtResource("9_8qkgq")
 
 [node name="CSGBox3D5" type="CSGBox3D" parent="Level/CSGBox3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, -3, -7)
