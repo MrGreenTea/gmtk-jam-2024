@@ -82,7 +82,6 @@ lookleft={
 ]
 }
 
-
 [shader_globals]
 
 diffuse_curve={

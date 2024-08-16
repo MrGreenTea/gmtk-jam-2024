@@ -1,0 +1,7 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://cm812qlnscpyk"]
+
+[ext_resource type="Shader" path="res://cel-shader-base.gdshader" id="1_ix3lr"]
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_ix3lr")
