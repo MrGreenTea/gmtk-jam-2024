@@ -9,11 +9,6 @@
 
 [sub_resource type="NavigationMesh" id="NavigationMesh_k3a3b"]
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_4v28t"]
-
-[sub_resource type="BoxMesh" id="BoxMesh_kcvs8"]
-material = SubResource("StandardMaterial3D_4v28t")
-
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_nvyi1"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_w26p4"]
@@ -21,6 +16,11 @@ size = Vector3(60, 2, 60)
 
 [sub_resource type="BoxMesh" id="BoxMesh_8k2ml"]
 size = Vector3(60, 2, 60)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_4v28t"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_kcvs8"]
+material = SubResource("StandardMaterial3D_4v28t")
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_gha47"]
 
@@ -38,15 +38,6 @@ mesh = SubResource("CylinderMesh_308jq")
 
 [node name="NavigationRegion3D" type="NavigationRegion3D" parent="."]
 navigation_mesh = SubResource("NavigationMesh_k3a3b")
-
-[node name="MeshInstance3D3" type="MeshInstance3D" parent="NavigationRegion3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.033, 0.5, -9.51308)
-mesh = SubResource("BoxMesh_kcvs8")
-
-[node name="Target" type="MeshInstance3D" parent="NavigationRegion3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.51659, 0.5, 8.80305)
-mesh = SubResource("BoxMesh_kcvs8")
-skeleton = NodePath("../..")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="NavigationRegion3D"]
 
