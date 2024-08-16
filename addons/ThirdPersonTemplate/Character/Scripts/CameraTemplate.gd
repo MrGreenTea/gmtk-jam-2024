@@ -19,14 +19,16 @@ func _ready():
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 	
 func _input(event):
+	if Input.is_action_pressed("ui_cancel"):
+		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+	if Input.is_action_pressed("attack"):
+		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 	if event is InputEventMouseMotion:
-	
 		camrot_h += -event.relative.x * h_sensitivity
 		camrot_v += event.relative.y * v_sensitivity
 		
 func _joystick_input():
 	if (Input.is_action_pressed("lookup") ||  Input.is_action_pressed("lookdown") ||  Input.is_action_pressed("lookleft") ||  Input.is_action_pressed("lookright")):
-		
 		joyview.x = Input.get_action_strength("lookleft") - Input.get_action_strength("lookright")
 		joyview.y = Input.get_action_strength("lookup") - Input.get_action_strength("lookdown")
 		camrot_h += joyview.x * joystick_sensitivity * h_sensitivity
