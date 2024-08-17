@@ -77,6 +77,8 @@ func target_assumed_position():
 		
 	print("Target last position: ", target_last_position)
 	
+	$TargetPosDebugMarker.global_position = target_last_position
+	
 	if target_ever_seen:
 		return target_last_position
 	else:
@@ -87,12 +89,9 @@ func direction_towards_target():
 	return direction
 
 func target_in_range():
-	var direction = target_location_node.global_position - self.eyes.global_position
-	print("Direction: ", direction, ", Length: ", direction.length())
-	if direction.length() < view_range:
-		return true
-	else:
-		return false
+	var distance = target_location_node.global_position - self.eyes.global_position
+	print("Direction: ", distance, ", Length: ", distance.length())
+	return distance.length() < view_range
 
 func target_in_viewport():
 	return eyes_camera.is_position_in_frustum(target_location_node.global_position)
@@ -224,6 +223,11 @@ func _physics_process(delta):
 	# TODO: Running rule, idle rule
 	is_walking = true
 	is_running = false
+	
+	
+	if direction.length() < 0.1:
+		is_walking = false
+		direction = Vector3.ZERO
 	
 	#if Input.is_action_pressed("aim"):  # Aim/Strafe input and  mechanics
 		#player_mesh.rotation.y = lerp_angle(player_mesh.rotation.y, $Camroot/h.rotation.y, delta * angular_acceleration)

@@ -1,4 +1,4 @@
-[gd_scene load_steps=35 format=3 uid="uid://caaswg7q8dfl5"]
+[gd_scene load_steps=37 format=3 uid="uid://caaswg7q8dfl5"]
 
 [ext_resource type="Script" path="res://addons/ThirdPersonTemplate/Character/Scripts/EnemyTemplate.gd" id="1_q61mr"]
 [ext_resource type="PackedScene" uid="uid://380f2sxovfxo" path="res://models/ant_model/ohne_popo_ant.tscn" id="3_6q6u3"]
@@ -156,9 +156,16 @@ states/Walk/position = Vector2(566, 213)
 transitions = ["Idle", "Attack1", SubResource("25"), "Attack1", "Attack2", SubResource("26"), "Run", "BigAttack", SubResource("37"), "BigAttack", "Idle", SubResource("38"), "Roll", "Run", SubResource("39"), "Roll", "Idle", SubResource("40"), "Run", "Jump", SubResource("44"), "Idle", "Jump", SubResource("45"), "Attack1", "Idle", SubResource("46"), "Attack2", "Idle", SubResource("47"), "Roll", "RollAttack", SubResource("100"), "RollAttack", "Idle", SubResource("101"), "Start", "Idle", SubResource("AnimationNodeStateMachineTransition_u47nw"), "Idle", "Walk", SubResource("27"), "Walk", "Run", SubResource("28"), "Run", "Walk", SubResource("31"), "Walk", "Idle", SubResource("32"), "Roll", "Walk", SubResource("41"), "Walk", "Jump", SubResource("42"), "Jump", "Walk", SubResource("43")]
 graph_offset = Vector2(-54.003, 108.078)
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_7y5cb"]
+albedo_color = Color(1, 0, 0, 1)
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_x2usv"]
+material = SubResource("StandardMaterial3D_7y5cb")
+
 [node name="Enemy" type="CharacterBody3D"]
 script = ExtResource("1_q61mr")
 PlayerCharacterMesh = NodePath("Walk With Rifle")
+view_range = 25
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.828374, 0)
@@ -189,7 +196,10 @@ visible = false
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.52732, 0.352843)
 
 [node name="Camera3D" type="Camera3D" parent="Walk With Rifle/Eyes"]
-transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 0, 0, 0)
+transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 0, 0, 0.0847415)
+
+[node name="TargetPosDebugMarker" type="MeshInstance3D" parent="."]
+mesh = SubResource("CapsuleMesh_x2usv")
 
 [editable path="ohne popo ant"]
 [editable path="Walk With Rifle"]
