@@ -144,5 +144,5 @@ operation = 2
 size = Vector3(22, 10, 14)
 material = ExtResource("6_7xeo2")
 
-[node name="PlayerTemplate" parent="." instance=ExtResource("8_githm")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.579166, 18.9314, 4.81852)
+[node name="Player" parent="." instance=ExtResource("8_githm")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.08701, 16.1948, 3.39701)

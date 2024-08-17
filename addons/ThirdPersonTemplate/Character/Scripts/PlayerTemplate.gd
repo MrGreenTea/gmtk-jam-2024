@@ -45,6 +45,8 @@ var acceleration = int()
 
 func _ready(): # Camera based Rotation
 	direction = Vector3.BACK.rotated(Vector3.UP, $Camroot/h.global_transform.basis.get_euler().y)
+	if animation_tree.anim_player == null:
+		animation_tree.anim_player = player_mesh.get_node("AnimationPlayer")
 
 func _input(event): # All major mouse and button input events
 	if event is InputEventMouseMotion:
