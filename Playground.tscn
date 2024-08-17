@@ -1,4 +1,4 @@
-[gd_scene load_steps=21 format=3 uid="uid://osmkqqe7spxt"]
+[gd_scene load_steps=26 format=3 uid="uid://osmkqqe7spxt"]
 
 [ext_resource type="Sky" uid="uid://cbbdl23q60wak" path="res://addons/ThirdPersonTemplate/Environments/SkyBox.res" id="2_vp21c"]
 [ext_resource type="Material" uid="uid://c1u020xb37y6n" path="res://addons/ThirdPersonTemplate/Environments/Materials/Blue.material" id="3_ugxud"]
@@ -9,6 +9,8 @@
 [ext_resource type="Texture2D" uid="uid://b3itydmnw8lm3" path="res://addons/ThirdPersonTemplate/Environments/Textures/Grid_01_BaseMap.png" id="7_wkldu"]
 [ext_resource type="PackedScene" uid="uid://bujr5gkm2kok1" path="res://player/player.tscn" id="8_githm"]
 [ext_resource type="PackedScene" uid="uid://caaswg7q8dfl5" path="res://enemy/enemy.tscn" id="9_kt1i0"]
+[ext_resource type="PackedScene" uid="uid://ct6t5b3wl3j5y" path="res://level/world_boundary.tscn" id="10_yb8u0"]
+[ext_resource type="PackedScene" uid="uid://dabticx6k2kol" path="res://level/scalable_rigid_body_3d.tscn" id="11_rub6x"]
 
 [sub_resource type="Environment" id="Environment_qyvd4"]
 background_mode = 2
@@ -104,8 +106,15 @@ shader_parameter/base_texture = ExtResource("7_wkldu")
 shader_parameter/uv_scale = Vector2(3, 3)
 shader_parameter/uv_offset = Vector2(0, 0)
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_y3o56"]
-size = Vector3(100, 100, 100)
+[sub_resource type="BoxMesh" id="BoxMesh_k2bwx"]
+size = Vector3(3, 1, 1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_n3dxb"]
+size = Vector3(3, 1, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_4a0dd"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_0ggqb"]
 
 [node name="Scene" type="Node3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0815773, -1.43051e-06, 0.163605)
@@ -215,7 +224,27 @@ view_range = 30
 max_scale_slap = 2
 slap_multiplier = 100
 
-[node name="WorldBoundary" type="Area3D" parent="."]
+[node name="WorldBoundary" parent="." instance=ExtResource("10_yb8u0")]
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="WorldBoundary"]
-shape = SubResource("BoxShape3D_y3o56")
+[node name="RigidBody3D2" parent="." node_paths=PackedStringArray("mesh", "collision_shape") instance=ExtResource("11_rub6x")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.6273, 5.63424, -11.4553)
+mesh = NodePath("MeshInstance3D")
+collision_shape = NodePath("CollisionShape3D")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="RigidBody3D2"]
+mesh = SubResource("BoxMesh_k2bwx")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="RigidBody3D2"]
+shape = SubResource("BoxShape3D_n3dxb")
+
+[node name="RigidBody3D" parent="." node_paths=PackedStringArray("mesh", "collision_shape") instance=ExtResource("11_rub6x")]
+mesh = NodePath("MeshInstance3D")
+collision_shape = NodePath("CollisionShape3D")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="RigidBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.80524, 0)
+mesh = SubResource("SphereMesh_4a0dd")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="RigidBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.80524, 0)
+shape = SubResource("SphereShape3D_0ggqb")

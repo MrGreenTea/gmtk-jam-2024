@@ -20,6 +20,9 @@ signal target_shot(target_collider)
 @export var walk_speed = 1.3
 @export var run_speed = 5.5
 @export var dash_power = 12 # Controls roll and big attack speed boosts
+@export var scale_rate = 1.01
+@export var scale_rate_shoot = 1.01
+@export var scale_rate_hit_enemy = 0.98
 @export var hp_max = 100
 @onready var hp_cur = hp_max
 
@@ -81,6 +84,8 @@ func sprint_and_roll():
 func shoot():
 	var shooting = Input.is_action_pressed("attack")
 	if shooting:
+		self.scale *= scale_rate_shoot
+		
 		var camera_camera = $Camroot/h/v/Camera3D
 		var ch_pos = crosshair.position + crosshair.size * 0.5
 		var ray_from = camera_camera.project_ray_origin(ch_pos)
@@ -94,13 +99,13 @@ func shoot():
 			target_shot.emit(col)
 			var collider_name = target_collider.name
 			
-			var scale_fac = 0.9
-			if "Enemy" in collider_name:
-				scale_fac = 1.1
-				 
-			if not "Floor" in collider_name:
-				target_collider.scale = target_collider.scale * scale_fac
-	
+			print("Hit! ", target_collider)
+			if (not "Floor" in collider_name) and target_collider is ScalableRigidBody3D:
+				target_collider._scale(0.9)
+			elif "Enemy" in collider_name:
+				target_collider.scale = target_collider.scale * 1.1
+				self.scale *= scale_rate_hit_enemy
+			
 			var new_mesh = MeshInstance3D.new()
 			new_mesh.mesh = SphereMesh.new()
 			new_mesh.transform.origin = shoot_target
@@ -228,6 +233,9 @@ func _physics_process(delta):
 	velocity.z = horizontal_velocity.z + vertical_velocity.z
 	velocity.x = horizontal_velocity.x + vertical_velocity.x
 	velocity.y = vertical_velocity.y
+	
+	# scale over time (WARNING: this crashes Amons PC)
+	# self.scale *= scale_rate * delta 
 	
 	move_and_slide()
 	
