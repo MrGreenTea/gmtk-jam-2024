@@ -1,9 +1,8 @@
-[gd_scene load_steps=36 format=3 uid="uid://bujr5gkm2kok1"]
+[gd_scene load_steps=35 format=3 uid="uid://caaswg7q8dfl5"]
 
-[ext_resource type="Script" path="res://addons/ThirdPersonTemplate/Character/Scripts/PlayerTemplate.gd" id="1_xs1nx"]
-[ext_resource type="PackedScene" uid="uid://dcyqaw6kwj58q" path="res://addons/ThirdPersonTemplate/Character/Nodes/camroot.tscn" id="2_dox61"]
-[ext_resource type="PackedScene" uid="uid://380f2sxovfxo" path="res://models/ant_model/ohne_popo_ant.tscn" id="3_iffcw"]
-[ext_resource type="PackedScene" uid="uid://dgmk4edbmgtmw" path="res://models/ant_model/Walk With Rifle.fbx" id="4_2wqhp"]
+[ext_resource type="Script" path="res://addons/ThirdPersonTemplate/Character/Scripts/EnemyTemplate.gd" id="1_q61mr"]
+[ext_resource type="PackedScene" uid="uid://380f2sxovfxo" path="res://models/ant_model/ohne_popo_ant.tscn" id="3_6q6u3"]
+[ext_resource type="PackedScene" uid="uid://dgmk4edbmgtmw" path="res://models/ant_model/Walk With Rifle.fbx" id="4_00uvm"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_83d0r"]
 radius = 0.296973
@@ -157,8 +156,8 @@ states/Walk/position = Vector2(566, 213)
 transitions = ["Idle", "Attack1", SubResource("25"), "Attack1", "Attack2", SubResource("26"), "Run", "BigAttack", SubResource("37"), "BigAttack", "Idle", SubResource("38"), "Roll", "Run", SubResource("39"), "Roll", "Idle", SubResource("40"), "Run", "Jump", SubResource("44"), "Idle", "Jump", SubResource("45"), "Attack1", "Idle", SubResource("46"), "Attack2", "Idle", SubResource("47"), "Roll", "RollAttack", SubResource("100"), "RollAttack", "Idle", SubResource("101"), "Start", "Idle", SubResource("AnimationNodeStateMachineTransition_u47nw"), "Idle", "Walk", SubResource("27"), "Walk", "Run", SubResource("28"), "Run", "Walk", SubResource("31"), "Walk", "Idle", SubResource("32"), "Roll", "Walk", SubResource("41"), "Walk", "Jump", SubResource("42"), "Jump", "Walk", SubResource("43")]
 graph_offset = Vector2(-54.003, 108.078)
 
-[node name="Player" type="CharacterBody3D"]
-script = ExtResource("1_xs1nx")
+[node name="Enemy" type="CharacterBody3D"]
+script = ExtResource("1_q61mr")
 PlayerCharacterMesh = NodePath("Walk With Rifle")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
@@ -181,12 +180,10 @@ parameters/conditions/IsWalking = false
 wait_time = 0.1
 one_shot = true
 
-[node name="Camroot" parent="." instance=ExtResource("2_dox61")]
-
-[node name="ohne popo ant" parent="." instance=ExtResource("3_iffcw")]
+[node name="ohne popo ant" parent="." instance=ExtResource("3_6q6u3")]
 visible = false
 
-[node name="Walk With Rifle" parent="." instance=ExtResource("4_2wqhp")]
+[node name="Walk With Rifle" parent="." instance=ExtResource("4_00uvm")]
 
 [editable path="ohne popo ant"]
 [editable path="Walk With Rifle"]

@@ -4,12 +4,12 @@ importer="scene"
 importer_version=1
 type="PackedScene"
 uid="uid://dgmk4edbmgtmw"
-path="res://.godot/imported/Walk With Rifle.fbx-f4c7fcf586ea08bd1c96e63ba209b5e5.scn"
+path="res://.godot/imported/Walk With Rifle.fbx-ff1ce8f04b4a5d8f751e518619e62d76.scn"
 
 [deps]
 
-source_file="res://player/model/Walk With Rifle.fbx"
-dest_files=["res://.godot/imported/Walk With Rifle.fbx-f4c7fcf586ea08bd1c96e63ba209b5e5.scn"]
+source_file="res://models/ant_model/Walk With Rifle.fbx"
+dest_files=["res://.godot/imported/Walk With Rifle.fbx-ff1ce8f04b4a5d8f751e518619e62d76.scn"]
 
 [params]
 

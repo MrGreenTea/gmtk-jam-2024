@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://380f2sxovfxo"]
 
-[ext_resource type="PackedScene" uid="uid://vgsgcqjlqydm" path="res://player/model/ohne popo ant.blend" id="1_rgs0s"]
+[ext_resource type="PackedScene" uid="uid://vgsgcqjlqydm" path="res://models/ant_model/ohne popo ant.blend" id="1_rgs0s"]
 [ext_resource type="Material" uid="uid://cm812qlnscpyk" path="res://player/player_cell_shader.tres" id="2_jsjub"]
 
 [node name="ohne popo ant" instance=ExtResource("1_rgs0s")]
