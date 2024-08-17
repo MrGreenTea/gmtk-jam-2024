@@ -112,7 +112,7 @@ func shoot():
 			new_mesh.mesh = SphereMesh.new()
 			new_mesh.transform.origin = shoot_target
 			new_mesh.scale = Vector3.ONE * 0.1
-			var level = get_node("../Level")
+			var level = get_node("..")
 			level.add_child(new_mesh)
 		
 func attack1(): # If not doing other things, start attack1
