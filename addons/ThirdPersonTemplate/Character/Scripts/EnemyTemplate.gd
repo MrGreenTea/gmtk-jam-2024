@@ -73,6 +73,7 @@ var is_rolling = bool()
 var is_walking = bool()
 var is_running = bool()
 var hit_recently = bool()
+var is_dead = bool()
 
 # Physics values
 var direction = Vector3()
@@ -251,6 +252,8 @@ func _print(str):
 		print(str)
 
 func _physics_process(delta):
+	if is_dead:
+		return
 	rollattack()
 	bigattack()
 	attack1()
@@ -309,8 +312,6 @@ func _physics_process(delta):
 	#if (Input.is_action_pressed("forward") ||  Input.is_action_pressed("backward") ||  Input.is_action_pressed("left") ||  Input.is_action_pressed("right")):
 	direction = direction_towards_target()
 	# direction = direction.rotated(Vector3.UP, h_rot).normalized()
-	is_walking = true
-	is_running = true
 		
 		
 	direction = direction_towards_target()
@@ -323,11 +324,20 @@ func _physics_process(delta):
 	else:
 		_print("Enemy walking")
 		is_walking = true
-		is_running = false
+		is_running = true
+	
+	if is_running:
+		movement_speed = run_speed
+	elif is_walking:
+		movement_speed = walk_speed
+	else:
+		movement_speed = 0
+	
 	
 	if direction.length() < 0.1:
 		_print("Enemy at assumed target, stopping")
 		is_walking = false
+		is_running = false
 		direction = Vector3.ZERO
 	
 	#else: # Normal turn movement mechanics
@@ -378,7 +388,9 @@ func _physics_process(delta):
 func hit(damage: float):
 	hit_recently = true
 	current_health = clamp(current_health - damage, 0, max_health)
-	print("Health: ", current_health, "/", max_health, " after ", damage, "damage")
+	print("Health: ", current_health, "/", max_health, " after ", damage, " damage")
 	if current_health <= 0:
-		await get_tree().create_timer(5).timeout
+		is_dead = true
+		playback.travel("Death")
+		await get_tree().create_timer(30).timeout
 		queue_free()
