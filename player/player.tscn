@@ -2,8 +2,8 @@
 
 [ext_resource type="Script" path="res://addons/ThirdPersonTemplate/Character/Scripts/PlayerTemplate.gd" id="1_xs1nx"]
 [ext_resource type="PackedScene" uid="uid://dcyqaw6kwj58q" path="res://addons/ThirdPersonTemplate/Character/Nodes/camroot.tscn" id="2_dox61"]
-[ext_resource type="PackedScene" uid="uid://380f2sxovfxo" path="res://models/ant_model/ohne_popo_ant.tscn" id="3_iffcw"]
-[ext_resource type="PackedScene" uid="uid://dgmk4edbmgtmw" path="res://models/ant_model/Walk With Rifle.fbx" id="4_2wqhp"]
+[ext_resource type="PackedScene" uid="uid://380f2sxovfxo" path="res://player/model/ohne_popo_ant.tscn" id="3_iffcw"]
+[ext_resource type="PackedScene" uid="uid://bxa6dlt1a5e5a" path="res://player/model/Walk With Rifle.tscn" id="4_yyc2v"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_83d0r"]
 radius = 0.296973
@@ -186,7 +186,7 @@ one_shot = true
 [node name="ohne popo ant" parent="." instance=ExtResource("3_iffcw")]
 visible = false
 
-[node name="Walk With Rifle" parent="." instance=ExtResource("4_2wqhp")]
+[node name="Walk With Rifle" parent="." instance=ExtResource("4_yyc2v")]
 
 [editable path="ohne popo ant"]
 [editable path="Walk With Rifle"]
