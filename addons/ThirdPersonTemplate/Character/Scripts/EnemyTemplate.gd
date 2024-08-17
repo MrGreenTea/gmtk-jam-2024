@@ -95,19 +95,7 @@ func target_in_range():
 		return false
 
 func target_in_viewport():
-	var direction = (target_location_node.global_position - self.eyes.global_position).normalized()
-	var forward_dir = -self.player_mesh.transform.basis.z
-	 #var direction_local = Transform3D().looking_at(direction, Vector3.UP)
-	print("direction: ", direction)
-	# print("direction local: ", direction_local)
-	print("Forward dir: ", forward_dir)
-	
-	var dot_product = direction.dot(forward_dir)
-	print("Dot product", dot_product)
-	if dot_product > 0.0: # viewport is everything in front of enemy
-		return true
-	else:
-		return false
+	return eyes_camera.is_position_in_frustum(target_location_node.global_position)
 
 func target_not_hidden_by_object():
 	var space_state = get_world_3d().direct_space_state
