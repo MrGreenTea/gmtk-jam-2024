@@ -3,6 +3,9 @@ extends CharacterBody3D
 # signal handler
 @onready var signal_handler = get_node("/root/AutoloadSignals")
 
+# local signals
+# signal delete_me
+
 # Grabs the prebuilt AnimationTree 
 @onready var PlayerAnimationTree = $AnimationTree.get_path()
 @onready var animation_tree = get_node(PlayerAnimationTree)
@@ -14,8 +17,11 @@ extends CharacterBody3D
 
 # enemy mechanics
 @export var target_character_with_collisionshape3d : Node3D
+@export var world_boundary : Area3D
+
 # debugging flags
 @export var spawn_target_pos: bool = false
+@export var print_debug: bool = false
 
 var target_last_position = Vector3()
 var target_ever_seen = false
@@ -25,6 +31,7 @@ var target_ever_seen = false
 @onready var eyes_camera = player_mesh.get_node("Eyes/Camera3D")
 @onready var player_camera = target_character_with_collisionshape3d.get_node("Camroot").get_node("h/v/Camera3D")
 @onready var weapon = player_mesh.get_node("Weapon")
+@onready var my_collision_shape = self.get_node("CollisionShape3D")
 
 # Gamplay mechanics and Inspector tweakables
 @export var gravity = 9.8
@@ -34,10 +41,16 @@ var target_ever_seen = false
 @export var dash_power = 12 # Controls roll and big attack speed boosts
 @export var view_range = 30
 @export var shoot_range = 10
+@export var max_scale_slap = 10
+@export var slap_multiplier = 1
+@export var slap_drag = 0.1
 
 @onready var shoot_timer = get_node("Walk With Rifle/Weapon/BulletRateTimer")
 @onready var shoot_freeze_timer = get_node("ShootingFreezeTimer")
+@onready var scale_slap_timer = get_node("ScaleSlapTimer")
 var shoot_ready = true
+var scale_slap_ready = true
+var rnd_generator = RandomNumberGenerator.new()
 
 # Animation node names
 var roll_node_name = "Roll"
@@ -63,6 +76,7 @@ var horizontal_velocity = Vector3()
 var aim_turn = float()
 var movement = Vector3()
 var vertical_velocity = Vector3()
+var slap_velocity = Vector3()
 var movement_speed = int()
 var angular_acceleration = int()
 var acceleration = int()
@@ -71,20 +85,24 @@ func _ready(): # Camera based Rotation
 	var player_script = get_node("PlayerTemplate")
 	shoot_timer.timeout.connect(_on_shoot_timer_timeout)
 	shoot_freeze_timer.timeout.connect(_on_shoot_freeze_timer_timeout)
+	scale_slap_timer.timeout.connect(_on_scale_slap_timer_timeout)
+	world_boundary.body_exited.connect(_on_exit_world_boundary)
 	
 	if not spawn_target_pos:
 		$TargetPosDebugMarker.visible = false
-	# target.connect("player_shot", pass)
-	# target.connect("player_shot", Callable("_on_player_shot"))
-	# direction = self.tran
 
-#func _input(event): # All major mouse and button input events
-	#if event is InputEventMouseMotion:
-		#aim_turn = -event.relative.x * 0.015 # animates player with mouse movement while aiming 
-	#
-	#if event.is_action_pressed("aim"): # Aim button triggers a strafe walk and camera mechanic
-		#direction = $Camroot/h.global_transform.basis.z
-
+func get_slap_force():
+	var slap_force = Vector3.ZERO
+	if scale_slap_ready and self.scale[0] >= max_scale_slap:
+		print("Enemy will get slapped")
+		var slap_force_base = Vector3(1, 1, 0)
+		var rnd_angle = rnd_generator.randf() * 2 * 3.14
+		slap_force = slap_force_base.rotated(Vector3.UP, rnd_angle) * self.scale
+		slap_force *= slap_multiplier
+		scale_slap_ready = false
+		scale_slap_timer.start()
+	return slap_force
+		
 func shoot():
 	var distance_to_target = (target_location_node.global_position - self.global_position).length()
 	if distance_to_target < shoot_range:
@@ -106,7 +124,7 @@ func target_assumed_position():
 	var _target_in_range = target_in_range() 
 	var _target_not_hidden_by_object = target_not_hidden_by_object() 
 	
-	print("In viewport: ", _target_in_viewport, ", In range: ", _target_in_range, ", Not hidden: ", _target_not_hidden_by_object)
+	_print("In viewport: %s, In range: %s, Not hidden: %s" % [_target_in_viewport, _target_in_range, _target_not_hidden_by_object])
 	if _target_in_range and _target_in_viewport and _target_not_hidden_by_object:
 		target_ever_seen = true
 		target_last_position = target.global_position
@@ -147,8 +165,15 @@ func target_not_hidden_by_object():
 		else:
 			return false
 	else:
-		print("No collisions at all! query is null")
+		_print("No collisions at all! query is null")
 		return true
+		
+func delete_if_outside_world_boundary():
+	var overlaps = world_boundary.get_overlapping_areas()
+	print(world_boundary.overlaps_body(my_collision_shape))
+	if not world_boundary.overlaps_body(my_collision_shape):
+		print("Enemy killed")
+		# queue_free()
 			
 func sprint_and_roll():
 ## Dodge button input with dash and interruption to basic actions
@@ -201,11 +226,23 @@ func _scaled(value, scale=self.scale):
 	return scale * value
 	
 func _on_shoot_timer_timeout():
-	print("Ready to shoot")
+	_print("Ready to shoot")
 	shoot_ready = true
 
 func _on_shoot_freeze_timer_timeout():
 	is_shooting = false
+	
+func _on_scale_slap_timer_timeout():
+	scale_slap_ready = true
+
+func _on_exit_world_boundary(object):
+	if object == self:
+		print("Enemy killed!")
+		self.queue_free()
+
+func _print(str):
+	if print_debug:
+		print(str)
 
 func _physics_process(delta):
 	rollattack()
@@ -261,20 +298,25 @@ func _physics_process(delta):
 		#vertical_velocity = Vector3.UP * jump_force
 		
 	# Movement input, state and mechanics. *Note: movement stops if attacking
+	
+	# slap when scale reaches limit
+
+		
+		
 	direction = direction_towards_target()
 	
 	# TODO: Running rule, idle rule
 	if is_shooting:
-		print("Enemy shooting")
+		_print("Enemy shooting")
 		is_walking = false
 		is_running = false
 	else:
-		print("Enemy walking")
+		_print("Enemy walking")
 		is_walking = true
 		is_running = false
 	
 	if direction.length() < 0.1:
-		print("Enemy at assumed target, stopping")
+		_print("Enemy at assumed target, stopping")
 		is_walking = false
 		direction = Vector3.ZERO
 	
@@ -292,8 +334,15 @@ func _physics_process(delta):
 	velocity.x = horizontal_velocity.x + vertical_velocity.x
 	velocity.y = vertical_velocity.y
 	
+	# get slapped
+	slap_velocity = get_slap_force() + (1 - slap_drag * delta) * slap_velocity 
+	velocity += slap_velocity
+	
 	move_and_slide()
 
+	# killed?
+	# delete_if_outside_world_boundary()
+	
 	# viewport debugging
 	if Input.is_action_pressed("show_enemy_viewport"):
 		eyes_camera.make_current()
