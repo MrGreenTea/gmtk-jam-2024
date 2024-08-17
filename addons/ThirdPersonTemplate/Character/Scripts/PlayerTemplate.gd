@@ -175,7 +175,8 @@ func _physics_process(delta):
 	velocity.y = vertical_velocity.y
 	
 	move_and_slide()
-
+	
+	
 	# ========= State machine controls =========
 	# The booleans of the on_floor, is_walking etc, trigger the 
 	# advanced conditions of the AnimationTree, controlling animation paths

@@ -10,8 +10,14 @@ extends CharacterBody3D
 @onready var player_mesh = get_node(PlayerCharacterMesh)
 
 # enemy mechanics
-@export var target : Node3D
+@export var target_character_with_collisionshape3d : Node3D
 var target_last_position = Vector3()
+var target_ever_seen = false
+@onready var target_location_node = target_character_with_collisionshape3d.get_node("CollisionShape3D")
+@onready var target = target_character_with_collisionshape3d
+@onready var eyes = player_mesh.get_node("Eyes")
+@onready var eyes_camera = player_mesh.get_node("Eyes/Camera3D")
+@onready var player_camera = target_character_with_collisionshape3d.get_node("Camroot").get_node("h/v/Camera3D")
 
 # Gamplay mechanics and Inspector tweakables
 @export var gravity = 9.8
@@ -19,6 +25,7 @@ var target_last_position = Vector3()
 @export var walk_speed = 1.3
 @export var run_speed = 5.5
 @export var dash_power = 12 # Controls roll and big attack speed boosts
+@export var view_range = 10
 
 # Animation node names
 var roll_node_name = "Roll"
@@ -58,37 +65,66 @@ func _ready(): # Camera based Rotation
 	#if event.is_action_pressed("aim"): # Aim button triggers a strafe walk and camera mechanic
 		#direction = $Camroot/h.global_transform.basis.z
 
+func target_assumed_position():
+	var _target_in_viewport = target_in_viewport() 
+	var _target_in_range = target_in_range() 
+	var _target_not_hidden_by_object = target_not_hidden_by_object() 
+	
+	print("In viewport: ", _target_in_viewport, ", In range: ", _target_in_range, ", Not hidden: ", _target_not_hidden_by_object)
+	if _target_in_range and _target_in_viewport and _target_not_hidden_by_object:
+		target_ever_seen = true
+		target_last_position = target.global_position
+		
+	print("Target last position: ", target_last_position)
+	
+	if target_ever_seen:
+		return target_last_position
+	else:
+		return self.global_position
+
 func direction_towards_target():
-	var direction = target.position - self.position
+	var direction = target_assumed_position() - self.global_position
 	return direction
 
 func target_in_range():
-	return true
-
-func target_in_viewport():
-	var direction = target.position - self.position
-	var forward_dir = -self.transform.basis.z
-	print("Forward dir", forward_dir)
-	var dot_product = direction.dot(forward_dir)
-	print("Dot product", dot_product)
-	if dot_product > 0.0:
+	var direction = target_location_node.global_position - self.eyes.global_position
+	print("Direction: ", direction, ", Length: ", direction.length())
+	if direction.length() < view_range:
 		return true
 	else:
 		return false
 
-func target_hidden_by_object():
+func target_in_viewport():
+	var direction = (target_location_node.global_position - self.eyes.global_position).normalized()
+	var forward_dir = -self.player_mesh.transform.basis.z
+	 #var direction_local = Transform3D().looking_at(direction, Vector3.UP)
+	print("direction: ", direction)
+	# print("direction local: ", direction_local)
+	print("Forward dir: ", forward_dir)
+	
+	var dot_product = direction.dot(forward_dir)
+	print("Dot product", dot_product)
+	if dot_product > 0.0: # viewport is everything in front of enemy
+		return true
+	else:
+		return false
+
+func target_not_hidden_by_object():
 	var space_state = get_world_3d().direct_space_state
-	var from = self.global_position
-	var to = target.global_position
+	var from = self.eyes.global_position
+	var to = target_location_node.global_position
 	var query = PhysicsRayQueryParameters3D.create(from, to, 1, [self])
+	query.set_collide_with_areas(true)
+	
 	var result = space_state.intersect_ray(query)
-	print("collding result: ", result)
 	if (result):
 		if result.collider == target:
 			return true
 		else:
-			print("Colliding with", result.collider)
 			return false
+	else:
+		print("No collisions at all! query is null")
+		return true
 			
 func sprint_and_roll():
 ## Dodge button input with dash and interruption to basic actions
@@ -220,6 +256,12 @@ func _physics_process(delta):
 	
 	move_and_slide()
 
+	# viewport debugging
+	if Input.is_action_pressed("show_enemy_viewport"):
+		eyes_camera.make_current()
+	else:
+		player_camera.make_current()
+		
 	# ========= State machine controls =========
 	# The booleans of the on_floor, is_walking etc, trigger the 
 	# advanced conditions of the AnimationTree, controlling animation paths
