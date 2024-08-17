@@ -4,13 +4,13 @@
 [ext_resource type="Shader" path="res://cel-shader-base.gdshader" id="2_nqofp"]
 [ext_resource type="Texture2D" uid="uid://b3itydmnw8lm3" path="res://addons/ThirdPersonTemplate/Environments/Textures/Grid_01_BaseMap.png" id="3_ylihc"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_p1wgh"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_3nanf"]
 render_priority = 0
 shader = ExtResource("1_1rvgo")
 
 [resource]
 render_priority = 0
-next_pass = SubResource("ShaderMaterial_p1wgh")
+next_pass = SubResource("ShaderMaterial_3nanf")
 shader = ExtResource("2_nqofp")
 shader_parameter/color = Color(0.59, 0.59, 0.59, 1)
 shader_parameter/specular = Color(0.3, 0.3, 0.3, 0.5)
