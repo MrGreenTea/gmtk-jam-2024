@@ -93,8 +93,13 @@ func shoot():
 			var target_collider = col["collider"]
 			target_shot.emit(col)
 			var collider_name = target_collider.name
+			
+			var scale_fac = 0.9
+			if "Enemy" in collider_name:
+				scale_fac = 1.1
+				 
 			if not "Floor" in collider_name:
-				target_collider.scale = target_collider.scale * 0.9
+				target_collider.scale = target_collider.scale * scale_fac
 	
 			var new_mesh = MeshInstance3D.new()
 			new_mesh.mesh = SphereMesh.new()
@@ -135,6 +140,9 @@ func _on_player_shot():
 	hp_cur -= 1
 	print("Player shot! Current life: ", hp_cur)
 	self.scale *= 1.1
+
+func _scaled(value, scale=self.scale):
+	return scale * value
 
 func _physics_process(delta):
 	rollattack()
@@ -178,7 +186,7 @@ func _physics_process(delta):
 	
 #	Jump input and Mechanics
 	if Input.is_action_just_pressed("jump") and ((is_attacking != true) and (is_rolling != true)) and is_on_floor():
-		vertical_velocity = Vector3.UP * jump_force
+		vertical_velocity = Vector3.UP * _scaled(jump_force, sqrt(self.scale[0]))
 		
 	# Movement input, state and mechanics. *Note: movement stops if attacking
 	if (Input.is_action_pressed("forward") ||  Input.is_action_pressed("backward") ||  Input.is_action_pressed("left") ||  Input.is_action_pressed("right")):
@@ -214,7 +222,7 @@ func _physics_process(delta):
 	if ((is_attacking == true) or (is_rolling == true)): 
 		horizontal_velocity = horizontal_velocity.lerp(direction.normalized() * .01 , acceleration * delta)
 	else: # Movement mechanics without limitations 
-		horizontal_velocity = horizontal_velocity.lerp(direction.normalized() * movement_speed, acceleration * delta)
+		horizontal_velocity = horizontal_velocity.lerp(direction.normalized() * _scaled(movement_speed), acceleration * delta)
 	
 	# The Physics Sauce. Movement, gravity and velocity in a perfect dance.
 	velocity.z = horizontal_velocity.z + vertical_velocity.z

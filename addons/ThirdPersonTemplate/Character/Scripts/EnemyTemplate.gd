@@ -14,6 +14,9 @@ extends CharacterBody3D
 
 # enemy mechanics
 @export var target_character_with_collisionshape3d : Node3D
+# debugging flags
+@export var spawn_target_pos: bool = false
+
 var target_last_position = Vector3()
 var target_ever_seen = false
 @onready var target_location_node = target_character_with_collisionshape3d.get_node("CollisionShape3D")
@@ -68,6 +71,9 @@ func _ready(): # Camera based Rotation
 	var player_script = get_node("PlayerTemplate")
 	shoot_timer.timeout.connect(_on_shoot_timer_timeout)
 	shoot_freeze_timer.timeout.connect(_on_shoot_freeze_timer_timeout)
+	
+	if not spawn_target_pos:
+		$TargetPosDebugMarker.visible = false
 	# target.connect("player_shot", pass)
 	# target.connect("player_shot", Callable("_on_player_shot"))
 	# direction = self.tran
@@ -104,7 +110,7 @@ func target_assumed_position():
 	if _target_in_range and _target_in_viewport and _target_not_hidden_by_object:
 		target_ever_seen = true
 		target_last_position = target.global_position
-			
+	
 	$TargetPosDebugMarker.global_position = target_last_position
 	
 	if target_ever_seen:
@@ -191,6 +197,9 @@ func bigattack(): # If attack pressed while springing, do a special attack
 			#horizontal_velocity = direction * dash_power
 			#playback.travel(bigattack_node_name) #Add and Change this animation node for a different attack
 
+func _scaled(value, scale=self.scale):
+	return scale * value
+	
 func _on_shoot_timer_timeout():
 	print("Ready to shoot")
 	shoot_ready = true
@@ -276,7 +285,7 @@ func _physics_process(delta):
 	if ((is_attacking == true) or (is_rolling == true)): 
 		horizontal_velocity = horizontal_velocity.lerp(direction.normalized() * .01 , acceleration * delta)
 	else: # Movement mechanics without limitations 
-		horizontal_velocity = horizontal_velocity.lerp(direction.normalized() * movement_speed, acceleration * delta)
+		horizontal_velocity = horizontal_velocity.lerp(direction.normalized() * _scaled(movement_speed), acceleration * delta)
 	
 	# The Physics Sauce. Movement, gravity and velocity in a perfect dance.
 	velocity.z = horizontal_velocity.z + vertical_velocity.z
