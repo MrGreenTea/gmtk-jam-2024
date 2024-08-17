@@ -209,5 +209,8 @@ mesh = SubResource("CapsuleMesh_x2usv")
 [node name="ShootingFreezeTimer" type="Timer" parent="."]
 wait_time = 0.5
 
+[node name="ScaleSlapTimer" type="Timer" parent="."]
+wait_time = 10.0
+
 [editable path="ohne popo ant"]
 [editable path="Walk With Rifle"]

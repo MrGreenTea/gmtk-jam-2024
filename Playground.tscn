@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=3 uid="uid://osmkqqe7spxt"]
+[gd_scene load_steps=21 format=3 uid="uid://osmkqqe7spxt"]
 
 [ext_resource type="Sky" uid="uid://cbbdl23q60wak" path="res://addons/ThirdPersonTemplate/Environments/SkyBox.res" id="2_vp21c"]
 [ext_resource type="Material" uid="uid://c1u020xb37y6n" path="res://addons/ThirdPersonTemplate/Environments/Materials/Blue.material" id="3_ugxud"]
@@ -104,6 +104,9 @@ shader_parameter/base_texture = ExtResource("7_wkldu")
 shader_parameter/uv_scale = Vector2(3, 3)
 shader_parameter/uv_offset = Vector2(0, 0)
 
+[sub_resource type="BoxShape3D" id="BoxShape3D_y3o56"]
+size = Vector3(100, 100, 100)
+
 [node name="Scene" type="Node3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0815773, -1.43051e-06, 0.163605)
 
@@ -204,7 +207,15 @@ material = ExtResource("6_7xeo2")
 [node name="Player" parent="." instance=ExtResource("8_githm")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.08701, 0.301881, -13.4004)
 
-[node name="Enemy" parent="." node_paths=PackedStringArray("target_character_with_collisionshape3d") instance=ExtResource("9_kt1i0")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11.1415, 0.19482, -22.6612)
+[node name="Enemy" parent="." node_paths=PackedStringArray("target_character_with_collisionshape3d", "world_boundary") instance=ExtResource("9_kt1i0")]
+transform = Transform3D(0.999931, 0.0117283, 0, -0.0117283, 0.999931, 0, 0, 0, 1, -11.1415, 0.19482, -22.6612)
 target_character_with_collisionshape3d = NodePath("../Player")
+world_boundary = NodePath("../WorldBoundary")
 view_range = 30
+max_scale_slap = 2
+slap_multiplier = 100
+
+[node name="WorldBoundary" type="Area3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="WorldBoundary"]
+shape = SubResource("BoxShape3D_y3o56")

@@ -1,6 +1,7 @@
 extends Node
 
 signal player_shot
+signal enemy_left_worldboundary(object)
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
