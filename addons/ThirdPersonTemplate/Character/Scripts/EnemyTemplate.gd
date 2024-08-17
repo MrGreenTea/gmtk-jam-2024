@@ -1,5 +1,8 @@
 extends CharacterBody3D
 
+# signal handler
+@onready var signal_handler = get_node("/root/AutoloadSignals")
+
 # Grabs the prebuilt AnimationTree 
 @onready var PlayerAnimationTree = $AnimationTree.get_path()
 @onready var animation_tree = get_node(PlayerAnimationTree)
@@ -18,6 +21,7 @@ var target_ever_seen = false
 @onready var eyes = player_mesh.get_node("Eyes")
 @onready var eyes_camera = player_mesh.get_node("Eyes/Camera3D")
 @onready var player_camera = target_character_with_collisionshape3d.get_node("Camroot").get_node("h/v/Camera3D")
+@onready var weapon = player_mesh.get_node("Weapon")
 
 # Gamplay mechanics and Inspector tweakables
 @export var gravity = 9.8
@@ -26,7 +30,7 @@ var target_ever_seen = false
 @export var run_speed = 5.5
 @export var dash_power = 12 # Controls roll and big attack speed boosts
 @export var view_range = 30
-@export var attack_range = 10
+@export var shoot_range = 10
 
 # Animation node names
 var roll_node_name = "Roll"
@@ -56,7 +60,9 @@ var angular_acceleration = int()
 var acceleration = int()
 
 func _ready(): # Camera based Rotation
-	pass
+	var player_script = get_node("PlayerTemplate")
+	# target.connect("player_shot", pass)
+	# target.connect("player_shot", Callable("_on_player_shot"))
 	# direction = self.tran
 
 #func _input(event): # All major mouse and button input events
@@ -66,6 +72,19 @@ func _ready(): # Camera based Rotation
 	#if event.is_action_pressed("aim"): # Aim button triggers a strafe walk and camera mechanic
 		#direction = $Camroot/h.global_transform.basis.z
 
+func shoot():
+	var distance_to_target = (target_location_node.global_position - self.global_position).length()
+	if distance_to_target < shoot_range:
+		var shoot_source = weapon.global_position
+		var shoot_target = target_location_node.global_position
+		var result = collider_ray(shoot_source, shoot_target)
+		
+		if not result.is_empty():
+			if result.collider == target:
+				# player_shot.emit()
+				print("Enemy emitting signal")
+				signal_handler.emit_signal("player_shot")
+			
 func target_assumed_position():
 	var _target_in_viewport = target_in_viewport() 
 	var _target_in_range = target_in_range() 
@@ -75,9 +94,7 @@ func target_assumed_position():
 	if _target_in_range and _target_in_viewport and _target_not_hidden_by_object:
 		target_ever_seen = true
 		target_last_position = target.global_position
-		
-	print("Target last position: ", target_last_position)
-	
+			
 	$TargetPosDebugMarker.global_position = target_last_position
 	
 	if target_ever_seen:
@@ -91,20 +108,23 @@ func direction_towards_target():
 
 func target_in_range():
 	var distance = target_location_node.global_position - self.eyes.global_position
-	print("Direction: ", distance, ", Length: ", distance.length())
 	return distance.length() < view_range
 
 func target_in_viewport():
 	return eyes_camera.is_position_in_frustum(target_location_node.global_position)
 
-func target_not_hidden_by_object():
+func collider_ray(from, to):
 	var space_state = get_world_3d().direct_space_state
-	var from = self.eyes.global_position
-	var to = target_location_node.global_position
 	var query = PhysicsRayQueryParameters3D.create(from, to, 1, [self])
 	query.set_collide_with_areas(true)
 	
-	var result = space_state.intersect_ray(query)
+	return space_state.intersect_ray(query)
+
+func target_not_hidden_by_object():
+	var from = self.eyes.global_position
+	var to = target_location_node.global_position
+	
+	var result = collider_ray(from, to)
 	if (result):
 		if result.collider == target:
 			return true
@@ -160,7 +180,10 @@ func bigattack(): # If attack pressed while springing, do a special attack
 		#if Input.is_action_just_pressed("attack"):
 			#horizontal_velocity = direction * dash_power
 			#playback.travel(bigattack_node_name) #Add and Change this animation node for a different attack
-	
+
+func _on_player_shot():
+	print("(Enemy sends:) Player hit!")
+
 func _physics_process(delta):
 	rollattack()
 	bigattack()
@@ -168,6 +191,7 @@ func _physics_process(delta):
 	attack2()
 	attack3()
 	sprint_and_roll()
+	shoot()
 	
 	var on_floor = is_on_floor() # State control for is jumping/falling/landing
 	# var h_rot = $Camroot/h.global_transform.basis.get_euler().y

@@ -198,6 +198,9 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.52732, 0.352843)
 [node name="Camera3D" type="Camera3D" parent="Walk With Rifle/Eyes"]
 transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 0, 0, 0.0847415)
 
+[node name="Weapon" type="Node3D" parent="Walk With Rifle"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.858451, 0)
+
 [node name="TargetPosDebugMarker" type="MeshInstance3D" parent="."]
 mesh = SubResource("CapsuleMesh_x2usv")
 

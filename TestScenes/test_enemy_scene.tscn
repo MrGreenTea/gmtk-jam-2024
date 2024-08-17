@@ -18,6 +18,11 @@ transform = Transform3D(1, 0, 0, 0, 0.812124, 0.583485, 0, -0.583485, 0.812124, 
 [node name="EnemyAnt" parent="." node_paths=PackedStringArray("target_character_with_collisionshape3d") instance=ExtResource("4_rixf8")]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -0.00263166, 0, 3.62701)
 target_character_with_collisionshape3d = NodePath("../Player")
+gravity = 9.8
+jump_force = 9
+walk_speed = 1.3
+run_speed = 5.5
+dash_power = 12
 
 [node name="Obstacle" parent="." instance=ExtResource("4_wpe4b")]
 

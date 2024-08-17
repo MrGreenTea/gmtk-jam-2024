@@ -1,6 +1,7 @@
 extends CharacterBody3D
 
 signal target_shot(target_collider)
+@onready var signal_handler = get_node("/root/AutoloadSignals")
 
 # Grabs the prebuilt AnimationTree 
 @onready var PlayerAnimationTree = $AnimationTree.get_path()
@@ -19,6 +20,8 @@ signal target_shot(target_collider)
 @export var walk_speed = 1.3
 @export var run_speed = 5.5
 @export var dash_power = 12 # Controls roll and big attack speed boosts
+@export var hp_max = 100
+@onready var hp_cur = hp_max
 
 # Animation node names
 var roll_node_name = "Roll"
@@ -53,7 +56,9 @@ func _ready(): # Camera based Rotation
 	direction = Vector3.BACK.rotated(Vector3.UP, $Camroot/h.global_transform.basis.get_euler().y)
 	if animation_tree.anim_player == null:
 		animation_tree.anim_player = player_mesh.get_node("AnimationPlayer")
-
+		
+	signal_handler.connect("player_shot", _on_player_shot)
+	
 func _input(event): # All major mouse and button input events
 	if event is InputEventMouseMotion:
 		aim_turn = -event.relative.x * 0.015 # animates player with mouse movement while aiming 
@@ -125,7 +130,12 @@ func bigattack(): # If attack pressed while springing, do a special attack
 		if Input.is_action_just_pressed("attack"):
 			horizontal_velocity = direction * dash_power
 			playback.travel(bigattack_node_name) #Add and Change this animation node for a different attack
-	
+
+func _on_player_shot():
+	hp_cur -= 1
+	print("Player shot! Current life: ", hp_cur)
+	self.scale *= 1.1
+
 func _physics_process(delta):
 	rollattack()
 	bigattack()
