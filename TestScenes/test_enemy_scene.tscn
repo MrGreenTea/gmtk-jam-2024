@@ -1,52 +1,28 @@
-[gd_scene load_steps=11 format=3 uid="uid://tu65yewoi5ep"]
+[gd_scene load_steps=5 format=3 uid="uid://tu65yewoi5ep"]
 
-[ext_resource type="PackedScene" uid="uid://btwel8et8o0ju" path="res://enemy/enemy_dummy.tscn" id="1_xkbih"]
-[ext_resource type="Script" path="res://enemy/enemy.gd" id="2_aaovk"]
 [ext_resource type="PackedScene" uid="uid://dma0jbihsvhea" path="res://TestScenes/test_enemy_navigation_region.tscn" id="3_lg0ql"]
 [ext_resource type="PackedScene" uid="uid://caaswg7q8dfl5" path="res://enemy/enemy.tscn" id="4_rixf8"]
+[ext_resource type="PackedScene" uid="uid://dyi8s2bgmrtp2" path="res://level/obstacle.tscn" id="4_wpe4b"]
 [ext_resource type="PackedScene" uid="uid://bujr5gkm2kok1" path="res://player/player.tscn" id="5_jecp8"]
-
-[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_r3fkn"]
-
-[sub_resource type="CylinderMesh" id="CylinderMesh_308jq"]
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_4v28t"]
-
-[sub_resource type="BoxMesh" id="BoxMesh_kcvs8"]
-material = SubResource("StandardMaterial3D_4v28t")
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_gha47"]
 
 [node name="Main" type="Node3D"]
 
 [node name="Player" parent="." instance=ExtResource("5_jecp8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6.22421)
 
-[node name="EnemyDummy" parent="." node_paths=PackedStringArray("target") instance=ExtResource("1_xkbih")]
-script = ExtResource("2_aaovk")
-target = NodePath("../FakePlayer")
-
-[node name="CollisionShape3D2" type="CollisionShape3D" parent="EnemyDummy"]
-shape = SubResource("CapsuleShape3D_r3fkn")
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="EnemyDummy"]
-mesh = SubResource("CylinderMesh_308jq")
-
 [node name="NavigationRegion3D" parent="." instance=ExtResource("3_lg0ql")]
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 0.812124, 0.583485, 0, -0.583485, 0.812124, 0, 0, 0)
 
-[node name="FakePlayer" type="CharacterBody3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.47516, 0.5, 7.43927)
-
-[node name="Target" type="MeshInstance3D" parent="FakePlayer"]
-mesh = SubResource("BoxMesh_kcvs8")
-skeleton = NodePath("../../NavigationRegion3D")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="FakePlayer"]
-shape = SubResource("BoxShape3D_gha47")
-
-[node name="EnemyAnt" parent="." node_paths=PackedStringArray("target") instance=ExtResource("4_rixf8")]
+[node name="EnemyAnt" parent="." node_paths=PackedStringArray("target_character_with_collisionshape3d") instance=ExtResource("4_rixf8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.9131, 0, 2.52951)
-target = NodePath("../Player")
+target_character_with_collisionshape3d = NodePath("../Player")
+
+[node name="Obstacle" parent="." instance=ExtResource("4_wpe4b")]
+
+[node name="Obstacle2" parent="." instance=ExtResource("4_wpe4b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.633528, 2.5, 18.8405)
+
+[node name="Obstacle3" parent="." instance=ExtResource("4_wpe4b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.633528, 2.5, -12.1637)

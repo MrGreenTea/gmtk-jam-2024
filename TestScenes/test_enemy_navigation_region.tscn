@@ -13,8 +13,6 @@ size = Vector3(60, 2, 60)
 [node name="NavigationRegion3D" type="NavigationRegion3D"]
 navigation_mesh = SubResource("NavigationMesh_k3a3b")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
-
 [node name="Ground" type="StaticBody3D" parent="."]
 physics_material_override = SubResource("PhysicsMaterial_nvyi1")
 

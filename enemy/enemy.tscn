@@ -185,5 +185,8 @@ visible = false
 
 [node name="Walk With Rifle" parent="." instance=ExtResource("4_00uvm")]
 
+[node name="Eyes" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.52732, 0.294638)
+
 [editable path="ohne popo ant"]
 [editable path="Walk With Rifle"]

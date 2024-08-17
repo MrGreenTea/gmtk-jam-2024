@@ -10,8 +10,10 @@ extends CharacterBody3D
 @onready var player_mesh = get_node(PlayerCharacterMesh)
 
 # enemy mechanics
-@export var target : Node3D
+@export var target_character_with_collisionshape3d : Node3D
 var target_last_position = Vector3()
+@onready var target = target_character_with_collisionshape3d.get_node("CollisionShape3D")
+@onready var eyes = self.get_node("Eyes")
 
 # Gamplay mechanics and Inspector tweakables
 @export var gravity = 9.8
@@ -58,15 +60,27 @@ func _ready(): # Camera based Rotation
 	#if event.is_action_pressed("aim"): # Aim button triggers a strafe walk and camera mechanic
 		#direction = $Camroot/h.global_transform.basis.z
 
+func target_assumed_position():
+	var _target_in_viewport = target_in_viewport() 
+	var _target_in_range = target_in_range() 
+	var _target_not_hidden_by_object = target_not_hidden_by_object() 
+	
+	print("In viewport: ", _target_in_viewport, ", In range: ", _target_in_range, ", Not hidden: ", _target_not_hidden_by_object)
+	if _target_in_range and _target_in_viewport and _target_not_hidden_by_object:
+		target_last_position = target.global_position
+		
+	print("Target last position: ", target_last_position)
+	return target_last_position
+
 func direction_towards_target():
-	var direction = target.position - self.position
+	var direction = target_assumed_position() - self.position
 	return direction
 
 func target_in_range():
 	return true
 
 func target_in_viewport():
-	var direction = target.position - self.position
+	var direction = (target.position - self.eyes.position).normalized()
 	var forward_dir = -self.transform.basis.z
 	print("Forward dir", forward_dir)
 	var dot_product = direction.dot(forward_dir)
@@ -76,19 +90,24 @@ func target_in_viewport():
 	else:
 		return false
 
-func target_hidden_by_object():
+func target_not_hidden_by_object():
 	var space_state = get_world_3d().direct_space_state
-	var from = self.global_position
+	var from = self.eyes.global_position
 	var to = target.global_position
 	var query = PhysicsRayQueryParameters3D.create(from, to, 1, [self])
+	query.set_collide_with_areas(true)
+	
 	var result = space_state.intersect_ray(query)
 	print("collding result: ", result)
 	if (result):
 		if result.collider == target:
-			return true
+			return false
 		else:
 			print("Colliding with", result.collider)
-			return false
+			return true
+	else:
+		print("No collisions at all! query is null")
+		return true
 			
 func sprint_and_roll():
 ## Dodge button input with dash and interruption to basic actions
