@@ -83,18 +83,20 @@ func shoot():
 
 		var col = get_parent().get_world_3d().direct_space_state.intersect_ray(PhysicsRayQueryParameters3D.create(ray_from, ray_from + ray_dir * 1000, 0b11, [self]))
 		var shoot_target
-		if col.is_empty():
-			shoot_target = ray_from + ray_dir * 1000
-		else:
+		if not col.is_empty():
 			shoot_target = col.position
+			var target_collider = col["collider"]
 			target_shot.emit(col)
+			var collider_name = target_collider.name
+			if not "Floor" in collider_name:
+				target_collider.scale = target_collider.scale * 0.9
 	
-		var new_mesh = MeshInstance3D.new()
-		new_mesh.mesh = SphereMesh.new()
-		new_mesh.transform.origin = shoot_target
-		new_mesh.scale = Vector3.ONE * 0.1
-		var level = get_node("../Level")
-		level.add_child(new_mesh)
+			var new_mesh = MeshInstance3D.new()
+			new_mesh.mesh = SphereMesh.new()
+			new_mesh.transform.origin = shoot_target
+			new_mesh.scale = Vector3.ONE * 0.1
+			var level = get_node("../Level")
+			level.add_child(new_mesh)
 		
 func attack1(): # If not doing other things, start attack1
 	if (idle_node_name in playback.get_current_node() or walk_node_name in playback.get_current_node()) and is_on_floor():
@@ -226,5 +228,3 @@ func _physics_process(delta):
 	animation_tree["parameters/conditions/IsNotRunning"] = !is_running
 	# Attacks and roll don't use these boolean conditions, instead
 	# they use "travel" or "start" to one-shot their animations.
-	
-	
