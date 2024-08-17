@@ -52,6 +52,9 @@ var shoot_ready = true
 var scale_slap_ready = true
 var rnd_generator = RandomNumberGenerator.new()
 
+@export var max_health = 10;
+var current_health = max_health;
+
 # Animation node names
 var roll_node_name = "Roll"
 var idle_node_name = "Idle"
@@ -69,6 +72,7 @@ var is_attacking = bool()
 var is_rolling = bool()
 var is_walking = bool()
 var is_running = bool()
+var hit_recently = bool()
 
 # Physics values
 var direction = Vector3()
@@ -124,7 +128,6 @@ func target_assumed_position():
 	var _target_in_range = target_in_range() 
 	var _target_not_hidden_by_object = target_not_hidden_by_object() 
 	
-	_print("In viewport: %s, In range: %s, Not hidden: %s" % [_target_in_viewport, _target_in_range, _target_not_hidden_by_object])
 	if _target_in_range and _target_in_viewport and _target_not_hidden_by_object:
 		target_ever_seen = true
 		target_last_position = target.global_position
@@ -137,6 +140,9 @@ func target_assumed_position():
 		return self.global_position
 
 func direction_towards_target():
+	if hit_recently:
+		hit_recently = false
+		return (target.global_position - self.global_position).normalized()
 	var direction = target_assumed_position() - self.global_position
 	return direction
 
@@ -298,9 +304,13 @@ func _physics_process(delta):
 		#vertical_velocity = Vector3.UP * jump_force
 		
 	# Movement input, state and mechanics. *Note: movement stops if attacking
-	
 	# slap when scale reaches limit
-
+	# TODO: direction input from chasing
+	#if (Input.is_action_pressed("forward") ||  Input.is_action_pressed("backward") ||  Input.is_action_pressed("left") ||  Input.is_action_pressed("right")):
+	direction = direction_towards_target()
+	# direction = direction.rotated(Vector3.UP, h_rot).normalized()
+	is_walking = true
+	is_running = true
 		
 		
 	direction = direction_towards_target()
@@ -365,3 +375,10 @@ func _physics_process(delta):
 	# they use "travel" or "start" to one-shot their animations.
 	
 	
+func hit(damage: float):
+	hit_recently = true
+	current_health = clamp(current_health - damage, 0, max_health)
+	print("Health: ", current_health, "/", max_health, " after ", damage, "damage")
+	if current_health <= 0:
+		await get_tree().create_timer(5).timeout
+		queue_free()

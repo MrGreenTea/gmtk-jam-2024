@@ -2,6 +2,8 @@ extends CharacterBody3D
 
 signal target_shot(target_collider)
 @onready var signal_handler = get_node("/root/AutoloadSignals")
+signal target_shot(target_collider)
+signal target_hit(target_collider)
 
 # Grabs the prebuilt AnimationTree 
 @onready var PlayerAnimationTree = $AnimationTree.get_path()
@@ -92,20 +94,20 @@ func shoot():
 		var ray_dir = camera_camera.project_ray_normal(ch_pos)
 
 		var col = get_parent().get_world_3d().direct_space_state.intersect_ray(PhysicsRayQueryParameters3D.create(ray_from, ray_from + ray_dir * 1000, 0b11, [self]))
-		var shoot_target
 		if not col.is_empty():
-			shoot_target = col.position
+			var shoot_target = col.position
 			var target_collider = col["collider"]
-			target_shot.emit(col)
+			target_hit.emit(col)
 			var collider_name = target_collider.name
 			
 			print("Hit! ", target_collider)
 			if (not "Floor" in collider_name) and target_collider is ScalableRigidBody3D:
 				target_collider._scale(0.9)
-			elif "Enemy" in collider_name:
+			elif target_collider.is_in_group("Enemies"):
 				target_collider.scale = target_collider.scale * 1.1
 				self.scale *= scale_rate_hit_enemy
 			
+	
 			var new_mesh = MeshInstance3D.new()
 			new_mesh.mesh = SphereMesh.new()
 			new_mesh.transform.origin = shoot_target
