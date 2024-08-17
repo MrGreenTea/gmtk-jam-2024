@@ -33,6 +33,7 @@ var target_ever_seen = false
 @export var shoot_range = 10
 
 @onready var shoot_timer = get_node("Walk With Rifle/Weapon/BulletRateTimer")
+@onready var shoot_freeze_timer = get_node("ShootingFreezeTimer")
 var shoot_ready = true
 
 # Animation node names
@@ -47,6 +48,7 @@ var bigattack_node_name = "BigAttack"
 var rollattack_node_name = "RollAttack"
 
 # Condition States
+var is_shooting = bool()
 var is_attacking = bool()
 var is_rolling = bool()
 var is_walking = bool()
@@ -65,6 +67,7 @@ var acceleration = int()
 func _ready(): # Camera based Rotation
 	var player_script = get_node("PlayerTemplate")
 	shoot_timer.timeout.connect(_on_shoot_timer_timeout)
+	shoot_freeze_timer.timeout.connect(_on_shoot_freeze_timer_timeout)
 	# target.connect("player_shot", pass)
 	# target.connect("player_shot", Callable("_on_player_shot"))
 	# direction = self.tran
@@ -86,9 +89,11 @@ func shoot():
 		if not result.is_empty():
 			if result.collider == target:
 				if shoot_ready:
-					signal_handler.emit_signal("player_shot")
+					is_shooting = true
 					shoot_ready = false
+					signal_handler.emit_signal("player_shot")
 					shoot_timer.start()
+					shoot_freeze_timer.start()
 			
 func target_assumed_position():
 	var _target_in_viewport = target_in_viewport() 
@@ -189,7 +194,9 @@ func bigattack(): # If attack pressed while springing, do a special attack
 func _on_shoot_timer_timeout():
 	print("Ready to shoot")
 	shoot_ready = true
-	
+
+func _on_shoot_freeze_timer_timeout():
+	is_shooting = false
 
 func _physics_process(delta):
 	rollattack()
@@ -203,10 +210,16 @@ func _physics_process(delta):
 	var on_floor = is_on_floor() # State control for is jumping/falling/landing
 	# var h_rot = $Camroot/h.global_transform.basis.get_euler().y
 	
-	movement_speed = walk_speed
 	angular_acceleration = 10
 	acceleration = 15
 
+	if is_walking:
+		movement_speed = walk_speed
+	elif is_running:
+		movement_speed = run_speed
+	else:
+		movement_speed = 0
+		
 	# Gravity mechanics and prevent slope-sliding
 	if not is_on_floor(): 
 		vertical_velocity += Vector3.DOWN * gravity * 2 * delta
@@ -215,6 +228,7 @@ func _physics_process(delta):
 		vertical_velocity = Vector3.DOWN * gravity / 10
 	
 	# Defining attack state: Add more attacks animations here as you add more!
+	# TODO: add shooting animation here to replace timeout
 	if (attack1_node_name in playback.get_current_node()) or (attack2_node_name in playback.get_current_node()) or (rollattack_node_name in playback.get_current_node()) or (bigattack_node_name in playback.get_current_node()): 
 		is_attacking = true
 	else: 
@@ -238,32 +252,23 @@ func _physics_process(delta):
 		#vertical_velocity = Vector3.UP * jump_force
 		
 	# Movement input, state and mechanics. *Note: movement stops if attacking
-	# TODO: direction input from chasing
-	#if (Input.is_action_pressed("forward") ||  Input.is_action_pressed("backward") ||  Input.is_action_pressed("left") ||  Input.is_action_pressed("right")):
 	direction = direction_towards_target()
-	# direction = direction.rotated(Vector3.UP, h_rot).normalized()
-	is_walking = true
-		
-	# Sprint input, dash state and movement speed
-	#if Input.is_action_pressed("sprint") and $DashTimer.is_stopped() and (is_walking == true ):
-		#movement_speed = run_speed
-		#is_running = true
-	#else: # Walk State and speed
-		#movement_speed = walk_speed
-		#is_running = false
 	
 	# TODO: Running rule, idle rule
-	is_walking = true
-	is_running = false
-	
+	if is_shooting:
+		print("Enemy shooting")
+		is_walking = false
+		is_running = false
+	else:
+		print("Enemy walking")
+		is_walking = true
+		is_running = false
 	
 	if direction.length() < 0.1:
+		print("Enemy at assumed target, stopping")
 		is_walking = false
 		direction = Vector3.ZERO
 	
-	#if Input.is_action_pressed("aim"):  # Aim/Strafe input and  mechanics
-		#player_mesh.rotation.y = lerp_angle(player_mesh.rotation.y, $Camroot/h.rotation.y, delta * angular_acceleration)
-#
 	#else: # Normal turn movement mechanics
 	player_mesh.rotation.y = lerp_angle(player_mesh.rotation.y, atan2(direction.x, direction.z) - rotation.y, delta * angular_acceleration)
 	

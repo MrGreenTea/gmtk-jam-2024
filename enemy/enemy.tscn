@@ -206,5 +206,8 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.858451, 0)
 [node name="TargetPosDebugMarker" type="MeshInstance3D" parent="."]
 mesh = SubResource("CapsuleMesh_x2usv")
 
+[node name="ShootingFreezeTimer" type="Timer" parent="."]
+wait_time = 0.5
+
 [editable path="ohne popo ant"]
 [editable path="Walk With Rifle"]
