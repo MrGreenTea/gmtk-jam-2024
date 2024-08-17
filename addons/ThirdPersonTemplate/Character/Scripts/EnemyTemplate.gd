@@ -25,7 +25,8 @@ var target_ever_seen = false
 @export var walk_speed = 1.3
 @export var run_speed = 5.5
 @export var dash_power = 12 # Controls roll and big attack speed boosts
-@export var view_range = 10
+@export var view_range = 30
+@export var attack_range = 10
 
 # Animation node names
 var roll_node_name = "Roll"
