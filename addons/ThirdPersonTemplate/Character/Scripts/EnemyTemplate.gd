@@ -32,6 +32,9 @@ var target_ever_seen = false
 @export var view_range = 30
 @export var shoot_range = 10
 
+@onready var shoot_timer = get_node("Walk With Rifle/Weapon/BulletRateTimer")
+var shoot_ready = true
+
 # Animation node names
 var roll_node_name = "Roll"
 var idle_node_name = "Idle"
@@ -61,6 +64,7 @@ var acceleration = int()
 
 func _ready(): # Camera based Rotation
 	var player_script = get_node("PlayerTemplate")
+	shoot_timer.timeout.connect(_on_shoot_timer_timeout)
 	# target.connect("player_shot", pass)
 	# target.connect("player_shot", Callable("_on_player_shot"))
 	# direction = self.tran
@@ -81,9 +85,10 @@ func shoot():
 		
 		if not result.is_empty():
 			if result.collider == target:
-				# player_shot.emit()
-				print("Enemy emitting signal")
-				signal_handler.emit_signal("player_shot")
+				if shoot_ready:
+					signal_handler.emit_signal("player_shot")
+					shoot_ready = false
+					shoot_timer.start()
 			
 func target_assumed_position():
 	var _target_in_viewport = target_in_viewport() 
@@ -181,8 +186,10 @@ func bigattack(): # If attack pressed while springing, do a special attack
 			#horizontal_velocity = direction * dash_power
 			#playback.travel(bigattack_node_name) #Add and Change this animation node for a different attack
 
-func _on_player_shot():
-	print("(Enemy sends:) Player hit!")
+func _on_shoot_timer_timeout():
+	print("Ready to shoot")
+	shoot_ready = true
+	
 
 func _physics_process(delta):
 	rollattack()
