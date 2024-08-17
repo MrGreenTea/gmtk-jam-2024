@@ -1,16 +1,13 @@
-[gd_scene load_steps=16 format=3 uid="uid://osmkqqe7spxt"]
+[gd_scene load_steps=21 format=3 uid="uid://osmkqqe7spxt"]
 
 [ext_resource type="Sky" uid="uid://cbbdl23q60wak" path="res://addons/ThirdPersonTemplate/Environments/SkyBox.res" id="2_vp21c"]
 [ext_resource type="Material" uid="uid://c1u020xb37y6n" path="res://addons/ThirdPersonTemplate/Environments/Materials/Blue.material" id="3_ugxud"]
-[ext_resource type="Material" uid="uid://d3up41bo0vjj0" path="res://addons/ThirdPersonTemplate/Environments/Materials/OrangeGrid.material" id="4_kii6k"]
 [ext_resource type="Shader" path="res://outline.gdshader" id="5_smt3s"]
-[ext_resource type="Material" uid="uid://ddpgp1pyklffr" path="res://addons/ThirdPersonTemplate/Environments/Materials/GreenGrid.material" id="6_5rtke"]
 [ext_resource type="Material" uid="uid://bquocw2a8n271" path="res://addons/ThirdPersonTemplate/Environments/Materials/GreyGrid.material" id="6_7xeo2"]
+[ext_resource type="Material" uid="uid://bi6x10o5kdsn2" path="res://level/ground_material_purple.tres" id="6_55o85"]
 [ext_resource type="Shader" path="res://cel-shader-base.gdshader" id="6_v1qe5"]
 [ext_resource type="Texture2D" uid="uid://b3itydmnw8lm3" path="res://addons/ThirdPersonTemplate/Environments/Textures/Grid_01_BaseMap.png" id="7_wkldu"]
-[ext_resource type="Material" uid="uid://cpk3jtowelhgh" path="res://addons/ThirdPersonTemplate/Environments/Materials/PingkGrid.material" id="7_xstjq"]
 [ext_resource type="PackedScene" uid="uid://bujr5gkm2kok1" path="res://player/player.tscn" id="8_githm"]
-[ext_resource type="Material" uid="uid://di64vyjqflky1" path="res://level/ground_material.tres" id="9_8qkgq"]
 
 [sub_resource type="Environment" id="Environment_qyvd4"]
 background_mode = 2
@@ -36,6 +33,21 @@ shader_parameter/base_texture = ExtResource("7_wkldu")
 shader_parameter/uv_scale = Vector2(5, 5)
 shader_parameter/uv_offset = Vector2(0, 0)
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_3nanf"]
+render_priority = 0
+shader = ExtResource("5_smt3s")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_f53pk"]
+render_priority = 0
+next_pass = SubResource("ShaderMaterial_3nanf")
+shader = ExtResource("6_v1qe5")
+shader_parameter/color = Color(1, 0.792157, 0.270588, 1)
+shader_parameter/specular = Color(0.3, 0.3, 0.3, 0.5)
+shader_parameter/fresnel = Color(0.2, 0.2, 0.2, 0.3)
+shader_parameter/base_texture = ExtResource("7_wkldu")
+shader_parameter/uv_scale = Vector2(3, 3)
+shader_parameter/uv_offset = Vector2(0, 0)
+
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_oy0tf"]
 render_priority = 0
 next_pass = SubResource("ShaderMaterial_p1wgh")
@@ -46,6 +58,55 @@ shader_parameter/fresnel = Color(0.2, 0.2, 0.2, 0.3)
 shader_parameter/base_texture = ExtResource("7_wkldu")
 shader_parameter/uv_scale = Vector2(2, 2)
 shader_parameter/uv_offset = Vector2(0, 0)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_5vo4i"]
+render_priority = 0
+next_pass = SubResource("ShaderMaterial_3nanf")
+shader = ExtResource("6_v1qe5")
+shader_parameter/color = Color(0.396078, 0.933333, 0.705882, 1)
+shader_parameter/specular = Color(0.3, 0.3, 0.3, 0.5)
+shader_parameter/fresnel = Color(0.2, 0.2, 0.2, 0.3)
+shader_parameter/base_texture = ExtResource("7_wkldu")
+shader_parameter/uv_scale = Vector2(3, 3)
+shader_parameter/uv_offset = Vector2(0, 0)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_kpn1q"]
+render_priority = 0
+next_pass = SubResource("ShaderMaterial_3nanf")
+shader = ExtResource("6_v1qe5")
+shader_parameter/color = Color(0.396078, 0.933333, 0.705882, 1)
+shader_parameter/specular = Color(0.3, 0.3, 0.3, 0.5)
+shader_parameter/fresnel = Color(0.2, 0.2, 0.2, 0.3)
+shader_parameter/base_texture = ExtResource("7_wkldu")
+shader_parameter/uv_scale = Vector2(3, 3)
+shader_parameter/uv_offset = Vector2(0, 0)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_cv6te"]
+render_priority = 0
+next_pass = SubResource("ShaderMaterial_3nanf")
+shader = ExtResource("6_v1qe5")
+shader_parameter/color = Color(0.396078, 0.933333, 0.705882, 1)
+shader_parameter/specular = Color(0.3, 0.3, 0.3, 0.5)
+shader_parameter/fresnel = Color(0.2, 0.2, 0.2, 0.3)
+shader_parameter/base_texture = ExtResource("7_wkldu")
+shader_parameter/uv_scale = Vector2(3, 3)
+shader_parameter/uv_offset = Vector2(0, 0)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_mqyph"]
+render_priority = 0
+next_pass = SubResource("ShaderMaterial_3nanf")
+shader = ExtResource("6_v1qe5")
+shader_parameter/color = Color(0.59, 0.59, 0.59, 1)
+shader_parameter/specular = Color(0.3, 0.3, 0.3, 0.5)
+shader_parameter/fresnel = Color(0.2, 0.2, 0.2, 0.3)
+shader_parameter/base_texture = ExtResource("7_wkldu")
+shader_parameter/uv_scale = Vector2(3, 3)
+shader_parameter/uv_offset = Vector2(0, 0)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_1l3s3"]
+
+[sub_resource type="SphereMesh" id="SphereMesh_j8jbl"]
+material = SubResource("StandardMaterial3D_1l3s3")
 
 [node name="Scene" type="Node3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0815773, -1.43051e-06, 0.163605)
@@ -71,10 +132,10 @@ size = Vector3(47.5872, 0.1, 47.791)
 material = SubResource("ShaderMaterial_vbcgd")
 
 [node name="CSGBox3D2" type="CSGBox3D" parent="Level"]
-transform = Transform3D(0.833182, 0, 0.552999, 0, 1, 0, -0.552999, 0, 0.833182, 16.5416, 3.19482, -15.014)
+transform = Transform3D(0.833182, 0, 0.552999, 0, 1, 0, -0.552999, 0, 0.833182, 16.5416, 3.42431, -15.014)
 use_collision = true
-size = Vector3(4, 6, 8)
-material = ExtResource("4_kii6k")
+size = Vector3(4, 6.45898, 8)
+material = SubResource("ShaderMaterial_f53pk")
 
 [node name="CSGBox3D6" type="CSGBox3D" parent="Level"]
 transform = Transform3D(-0.318513, 0, 0.947919, 0, 1, 0, -0.947919, 0, -0.318513, 0.541599, 13.1948, 3.986)
@@ -86,19 +147,19 @@ material = SubResource("ShaderMaterial_oy0tf")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9, 2.19482, -6.9983)
 use_collision = true
 size = Vector3(6, 8, 6)
-material = ExtResource("6_5rtke")
+material = SubResource("ShaderMaterial_5vo4i")
 
 [node name="CSGBox3D4" type="CSGBox3D" parent="Level"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 2.19482, -6.9983)
 use_collision = true
 size = Vector3(4, 4, 6)
-material = ExtResource("6_5rtke")
+material = SubResource("ShaderMaterial_kpn1q")
 
 [node name="CSGBox3D5" type="CSGBox3D" parent="Level"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 1.19482, -10.9983)
 use_collision = true
 size = Vector3(4, 2, 2)
-material = ExtResource("6_5rtke")
+material = SubResource("ShaderMaterial_cv6te")
 
 [node name="Node3D" type="Node3D" parent="Level"]
 transform = Transform3D(0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, 0.707107, -17.521, 4.76836e-07, -18.7606)
@@ -107,24 +168,24 @@ transform = Transform3D(0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, 0.707107, 
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.233154, 0.69482, -0.0343475)
 use_collision = true
 size = Vector3(8, 1, 1)
-material = ExtResource("7_xstjq")
+material = ExtResource("6_55o85")
 
 [node name="CSGBox3D5" type="CSGBox3D" parent="Level/Node3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.76685, 1.69482, -0.0343475)
 use_collision = true
 size = Vector3(4, 1, 1)
-material = ExtResource("7_xstjq")
+material = ExtResource("6_55o85")
 
 [node name="CSGBox3D6" type="CSGBox3D" parent="Level/Node3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.76685, 2.69482, -0.0343475)
 use_collision = true
-material = ExtResource("7_xstjq")
+material = ExtResource("6_55o85")
 
 [node name="CSGBox3D" type="CSGBox3D" parent="Level"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.19482, 4)
 use_collision = true
 size = Vector3(24, 10, 16)
-material = ExtResource("9_8qkgq")
+material = SubResource("ShaderMaterial_mqyph")
 
 [node name="CSGBox3D5" type="CSGBox3D" parent="Level/CSGBox3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, -3, -7)
@@ -143,6 +204,9 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0)
 operation = 2
 size = Vector3(22, 10, 14)
 material = ExtResource("6_7xeo2")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Level"]
+mesh = SubResource("SphereMesh_j8jbl")
 
 [node name="Player" parent="." instance=ExtResource("8_githm")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.08701, 16.1948, 3.39701)

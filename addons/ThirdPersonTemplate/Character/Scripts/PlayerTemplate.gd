@@ -1,5 +1,7 @@
 extends CharacterBody3D
 
+signal target_shot(target_collider)
+
 # Grabs the prebuilt AnimationTree 
 @onready var PlayerAnimationTree = $AnimationTree.get_path()
 @onready var animation_tree = get_node(PlayerAnimationTree)
@@ -8,6 +10,8 @@ extends CharacterBody3D
 # Allows to pick your chracter's mesh from the inspector
 @export_node_path("Node3D") var PlayerCharacterMesh: NodePath
 @onready var player_mesh = get_node(PlayerCharacterMesh)
+
+@onready var crosshair = $Crosshair
 
 # Gamplay mechanics and Inspector tweakables
 @export var gravity = 9.8
@@ -43,6 +47,8 @@ var movement_speed = int()
 var angular_acceleration = int()
 var acceleration = int()
 
+var prev_camera_offset = Vector3()
+
 func _ready(): # Camera based Rotation
 	direction = Vector3.BACK.rotated(Vector3.UP, $Camroot/h.global_transform.basis.get_euler().y)
 	if animation_tree.anim_player == null:
@@ -67,11 +73,33 @@ func sprint_and_roll():
 		horizontal_velocity = direction * dash_power
 		is_rolling = true
 		
+func shoot():
+	var shooting = Input.is_action_pressed("attack")
+	if shooting:
+		var camera_camera = $Camroot/h/v/Camera3D
+		var ch_pos = crosshair.position + crosshair.size * 0.5
+		var ray_from = camera_camera.project_ray_origin(ch_pos)
+		var ray_dir = camera_camera.project_ray_normal(ch_pos)
 
+		var col = get_parent().get_world_3d().direct_space_state.intersect_ray(PhysicsRayQueryParameters3D.create(ray_from, ray_from + ray_dir * 1000, 0b11, [self]))
+		var shoot_target
+		if col.is_empty():
+			shoot_target = ray_from + ray_dir * 1000
+		else:
+			shoot_target = col.position
+			target_shot.emit(col)
+	
+		var new_mesh = MeshInstance3D.new()
+		new_mesh.mesh = SphereMesh.new()
+		new_mesh.transform.origin = shoot_target
+		new_mesh.scale = Vector3.ONE * 0.1
+		var level = get_node("../Level")
+		level.add_child(new_mesh)
 		
 func attack1(): # If not doing other things, start attack1
 	if (idle_node_name in playback.get_current_node() or walk_node_name in playback.get_current_node()) and is_on_floor():
 		if Input.is_action_just_pressed("attack"):
+			shoot()
 			if (is_attacking == false):
 				playback.travel(attack1_node_name)
 				
@@ -161,6 +189,11 @@ func _physics_process(delta):
 	
 	if Input.is_action_pressed("aim"):  # Aim/Strafe input and  mechanics
 		player_mesh.rotation.y = lerp_angle(player_mesh.rotation.y, $Camroot/h.rotation.y, delta * angular_acceleration)
+	if Input.is_action_just_pressed("aim"):
+		prev_camera_offset = $Camroot/h/v/Camera3D.position
+		$Camroot/AnimationPlayer.play("aim")
+	if Input.is_action_just_released("aim"):
+		$Camroot/AnimationPlayer.play_backwards("aim")
 
 	else: # Normal turn movement mechanics
 		player_mesh.rotation.y = lerp_angle(player_mesh.rotation.y, atan2(direction.x, direction.z) - rotation.y, delta * angular_acceleration)
