@@ -12,7 +12,9 @@ extends CharacterBody3D
 # enemy mechanics
 @export var target_character_with_collisionshape3d : Node3D
 var target_last_position = Vector3()
-@onready var target = target_character_with_collisionshape3d.get_node("CollisionShape3D")
+var target_ever_seen = false
+@onready var target_location_node = target_character_with_collisionshape3d.get_node("CollisionShape3D")
+@onready var target = target_character_with_collisionshape3d
 @onready var eyes = self.get_node("Eyes")
 
 # Gamplay mechanics and Inspector tweakables
@@ -67,10 +69,15 @@ func target_assumed_position():
 	
 	print("In viewport: ", _target_in_viewport, ", In range: ", _target_in_range, ", Not hidden: ", _target_not_hidden_by_object)
 	if _target_in_range and _target_in_viewport and _target_not_hidden_by_object:
-		target_last_position = target.global_position
+		target_ever_seen = true
+		target_last_position = target.position
 		
 	print("Target last position: ", target_last_position)
-	return target_last_position
+	
+	if target_ever_seen:
+		return target_last_position
+	else:
+		return self.position
 
 func direction_towards_target():
 	var direction = target_assumed_position() - self.position
@@ -80,7 +87,7 @@ func target_in_range():
 	return true
 
 func target_in_viewport():
-	var direction = (target.position - self.eyes.position).normalized()
+	var direction = (target_location_node.position - self.eyes.position).normalized()
 	var forward_dir = -self.transform.basis.z
 	print("Forward dir", forward_dir)
 	var dot_product = direction.dot(forward_dir)
@@ -93,18 +100,20 @@ func target_in_viewport():
 func target_not_hidden_by_object():
 	var space_state = get_world_3d().direct_space_state
 	var from = self.eyes.global_position
-	var to = target.global_position
+	var to = target_location_node.global_position
 	var query = PhysicsRayQueryParameters3D.create(from, to, 1, [self])
 	query.set_collide_with_areas(true)
 	
 	var result = space_state.intersect_ray(query)
 	print("collding result: ", result)
+	print("Target ", target)
+	print("Target location node ", target_location_node)
 	if (result):
 		if result.collider == target:
-			return false
+			return true
 		else:
 			print("Colliding with", result.collider)
-			return true
+			return false
 	else:
 		print("No collisions at all! query is null")
 		return true
