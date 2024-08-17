@@ -4,12 +4,12 @@ importer="scene"
 importer_version=1
 type="PackedScene"
 uid="uid://vgsgcqjlqydm"
-path="res://.godot/imported/ohne popo ant.blend-722fbc72a53b82084c5ae921b06d3c82.scn"
+path="res://.godot/imported/ohne popo ant.blend-b38e7bb170ed1bf6906641efbbd2eb2f.scn"
 
 [deps]
 
-source_file="res://player/model/ohne popo ant.blend"
-dest_files=["res://.godot/imported/ohne popo ant.blend-722fbc72a53b82084c5ae921b06d3c82.scn"]
+source_file="res://models/ant_model/ohne popo ant.blend"
+dest_files=["res://.godot/imported/ohne popo ant.blend-b38e7bb170ed1bf6906641efbbd2eb2f.scn"]
 
 [params]
 
