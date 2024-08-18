@@ -2,7 +2,6 @@ extends CharacterBody3D
 
 signal target_shot(target_collider)
 @onready var signal_handler = get_node("/root/AutoloadSignals")
-signal target_shot(target_collider)
 signal target_hit(target_collider)
 
 # Grabs the prebuilt AnimationTree 
