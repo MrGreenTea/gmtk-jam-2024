@@ -2,7 +2,7 @@
 
 [ext_resource type="PackedScene" uid="uid://dma0jbihsvhea" path="res://TestScenes/test_enemy_navigation_region.tscn" id="3_lg0ql"]
 [ext_resource type="PackedScene" uid="uid://caaswg7q8dfl5" path="res://enemy/enemy.tscn" id="4_rixf8"]
-[ext_resource type="PackedScene" uid="uid://dyi8s2bgmrtp2" path="res://level/obstacle.tscn" id="4_wpe4b"]
+[ext_resource type="PackedScene" uid="uid://boppkqrad8a76" path="res://level/obstacle.tscn" id="4_wpe4b"]
 [ext_resource type="PackedScene" uid="uid://bujr5gkm2kok1" path="res://player/player.tscn" id="5_jecp8"]
 
 [node name="Main" type="Node3D"]
