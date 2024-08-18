@@ -87,7 +87,7 @@ var angular_acceleration = int()
 var acceleration = int()
 
 func _ready(): # Camera based Rotation
-	var player_script = get_node("PlayerTemplate")
+	# var player_script = get_node("PlayerTemplate")
 	shoot_timer.timeout.connect(_on_shoot_timer_timeout)
 	shoot_freeze_timer.timeout.connect(_on_shoot_freeze_timer_timeout)
 	scale_slap_timer.timeout.connect(_on_scale_slap_timer_timeout)

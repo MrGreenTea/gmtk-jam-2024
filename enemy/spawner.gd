@@ -13,8 +13,10 @@ func _process(delta: float) -> void:
 
 
 func _on_spawner_timer_timeout() -> void:
-	print("Spawn Enemy")
-	var new_enemy: Node3D = enemy.instantiate()
-	new_enemy.target_character_with_collisionshape3d = get_node("../Player")
-	get_parent().add_child(new_enemy)
-	new_enemy.global_position = self.global_position + Vector3.RIGHT * randf_range(-radius, radius) + Vector3.FORWARD * randf_range(-radius, radius)
+	if get_tree().get_nodes_in_group("Enemies").size() < 10:
+		print("Spawn Enemy")
+		var new_enemy: Node3D = enemy.instantiate()
+		new_enemy.target_character_with_collisionshape3d = get_node("../../Player")
+		new_enemy.world_boundary = get_node("../../WorldBoundary")
+		get_parent().add_child(new_enemy)
+		new_enemy.global_position = self.global_position + Vector3.RIGHT * randf_range(-radius, radius) + Vector3.FORWARD * randf_range(-radius, radius)
