@@ -225,9 +225,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.08701, 0.301881, -13.4004)
 transform = Transform3D(0.999931, 0.0117283, 0, -0.0117283, 0.999931, 0, 0, 0, 1, -11.1415, 0.19482, -22.6612)
 target_character_with_collisionshape3d = NodePath("../Player")
 world_boundary = NodePath("../WorldBoundary")
-view_range = 30
 max_scale_slap = 2
-slap_multiplier = 100
 
 [node name="WorldBoundary" parent="." instance=ExtResource("10_yb8u0")]
 

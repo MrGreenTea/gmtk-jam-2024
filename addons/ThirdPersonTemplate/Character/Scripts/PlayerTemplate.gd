@@ -97,6 +97,7 @@ func shoot():
 			var shoot_target = col.position
 			var target_collider = col["collider"]
 			target_hit.emit(col)
+			target_shot.emit(col)
 			var collider_name = target_collider.name
 			
 			print("Hit! ", target_collider)
@@ -216,7 +217,6 @@ func _physics_process(delta):
 	if Input.is_action_pressed("aim"):  # Aim/Strafe input and  mechanics
 		player_mesh.rotation.y = lerp_angle(player_mesh.rotation.y, $Camroot/h.rotation.y, delta * angular_acceleration)
 	if Input.is_action_just_pressed("aim"):
-		prev_camera_offset = $Camroot/h/v/Camera3D.position
 		$Camroot/AnimationPlayer.play("aim")
 	if Input.is_action_just_released("aim"):
 		$Camroot/AnimationPlayer.play_backwards("aim")

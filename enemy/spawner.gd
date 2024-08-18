@@ -1,6 +1,7 @@
 extends Node3D
 
 @export var radius: int
+@export_range(1, 100, 1, "or_greater") var max_enemies: int = 10
 @export var enemy: PackedScene
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -13,7 +14,7 @@ func _process(delta: float) -> void:
 
 
 func _on_spawner_timer_timeout() -> void:
-	if get_tree().get_nodes_in_group("Enemies").size() < 10:
+	if get_tree().get_nodes_in_group("Enemies").size() < max_enemies:
 		print("Spawn Enemy")
 		var new_enemy: Node3D = enemy.instantiate()
 		new_enemy.target_character_with_collisionshape3d = get_node("../../Player")

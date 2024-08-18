@@ -41,8 +41,8 @@ var target_ever_seen = false
 @export var dash_power = 12 # Controls roll and big attack speed boosts
 @export var view_range = 30
 @export var shoot_range = 10
-@export var max_scale_slap = 10
-@export var slap_multiplier = 1
+@export var max_scale_slap = 3
+@export var slap_multiplier = 100
 @export var slap_drag = 0.1
 
 @onready var shoot_timer = get_node("Walk With Rifle/Weapon/BulletRateTimer")
@@ -97,16 +97,16 @@ func _ready(): # Camera based Rotation
 		$TargetPosDebugMarker.visible = false
 
 func get_slap_force():
-	var slap_force = Vector3.ZERO
 	if scale_slap_ready and self.scale[0] >= max_scale_slap:
 		print("Enemy will get slapped")
 		var slap_force_base = Vector3(1, 1, 0)
-		var rnd_angle = rnd_generator.randf() * 2 * 3.14
-		slap_force = slap_force_base.rotated(Vector3.UP, rnd_angle) * self.scale
+		var rnd_angle = rnd_generator.randf() * TAU
+		var slap_force = slap_force_base.rotated(Vector3.UP, rnd_angle) * self.scale
 		slap_force *= slap_multiplier
 		scale_slap_ready = false
 		scale_slap_timer.start()
-	return slap_force
+		return slap_force
+	return Vector3.ZERO
 		
 func shoot():
 	var distance_to_target = (target_location_node.global_position - self.global_position).length()
@@ -326,19 +326,18 @@ func _physics_process(delta):
 		is_walking = true
 		is_running = true
 	
+	if direction.length() < 0.1:
+		_print("Enemy at assumed target, stopping")
+		is_walking = false
+		is_running = false
+		direction = Vector3.ZERO
+	
 	if is_running:
 		movement_speed = run_speed
 	elif is_walking:
 		movement_speed = walk_speed
 	else:
 		movement_speed = 0
-	
-	
-	if direction.length() < 0.1:
-		_print("Enemy at assumed target, stopping")
-		is_walking = false
-		is_running = false
-		direction = Vector3.ZERO
 	
 	#else: # Normal turn movement mechanics
 	player_mesh.rotation.y = lerp_angle(player_mesh.rotation.y, atan2(direction.x, direction.z) - rotation.y, delta * angular_acceleration)

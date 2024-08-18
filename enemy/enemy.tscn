@@ -172,7 +172,6 @@ material = SubResource("StandardMaterial3D_7y5cb")
 [node name="Enemy" type="CharacterBody3D" groups=["Enemies"]]
 script = ExtResource("1_q61mr")
 PlayerCharacterMesh = NodePath("Idle_Ant_Army_walking_Test_2")
-view_range = 25
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.828374, 0)
