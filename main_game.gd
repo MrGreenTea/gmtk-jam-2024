@@ -3,6 +3,8 @@ extends Node3D
 @onready var start_time = Time.get_unix_time_from_system()
 @onready var timer_label: Label = $SurvivalTime
 
+signal enemy_killed(enemy: Node3D)
+
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	pass # Replace with function body.

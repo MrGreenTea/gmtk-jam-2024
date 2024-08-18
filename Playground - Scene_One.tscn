@@ -221,3 +221,5 @@ offset_left = 16.0
 offset_top = 16.0
 offset_right = 56.0
 offset_bottom = 39.0
+
+[connection signal="enemy_killed" from="." to="Player" method="_on_scene_enemy_killed"]

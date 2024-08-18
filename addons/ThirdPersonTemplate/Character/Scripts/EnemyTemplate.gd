@@ -246,8 +246,7 @@ func _on_scale_slap_timer_timeout():
 
 func _on_exit_world_boundary(object):
 	if object == self:
-		print("Enemy killed!")
-		self.queue_free()
+		die()
 
 func _print(str):
 	if print_debug:
@@ -371,14 +370,19 @@ func _physics_process(delta):
 	animation_tree["parameters/conditions/IsNotRunning"] = !is_running
 	# Attacks and roll don't use these boolean conditions, instead
 	# they use "travel" or "start" to one-shot their animations.
-	
+
+func die():
+	print("Enemy killed!")
+	is_dead = true
+	get_node("/root/Scene").enemy_killed.emit(self)
+	playback.travel("Death")
+	await get_tree().create_timer(30).timeout
+	queue_free()
+
 	
 func hit(damage: float):
 	hit_recently = true
 	current_health = clamp(current_health - damage, 0, max_health)
 	print("Health: ", current_health, "/", max_health, " after ", damage, " damage")
 	if current_health <= 0:
-		is_dead = true
-		playback.travel("Death")
-		await get_tree().create_timer(30).timeout
-		queue_free()
+		die()

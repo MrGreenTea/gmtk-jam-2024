@@ -271,3 +271,9 @@ func die_and_restart():
 func _on_world_boundary_body_exited(body: Node3D) -> void:
 	if body == self:
 		die_and_restart()
+
+
+func _on_scene_enemy_killed(enemy: Node3D) -> void:
+	if self.scale.length() > 0.5:
+		self.scale /= scale_rate_shoot * 3
+	self.position += Vector3.UP * 0.1
