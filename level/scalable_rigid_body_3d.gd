@@ -28,5 +28,8 @@ func _scale(scale_fac):
 		collision_shape.shape.radius *= scale_fac
 	elif collision_shape.shape is BoxShape3D:
 		collision_shape.shape.size *= scale_fac
+	elif collision_shape.shape is CylinderShape3D or collision_shape.shape is CapsuleShape3D:
+		collision_shape.shape.height *= scale_fac
+		collision_shape.shape.radius *= scale_fac
 	else:
 		print("Collision shape not implemented! ", $CollisionShape3D)

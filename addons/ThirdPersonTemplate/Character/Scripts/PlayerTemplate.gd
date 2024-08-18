@@ -26,6 +26,9 @@ signal target_hit(target_collider)
 @export var scale_rate_hit_enemy = 0.98
 @export var hp_max = 100
 @onready var hp_cur = hp_max
+@export var shots_per_second = 2
+# start with a high enough number
+var time_since_last_shot = 1 / shots_per_second + 1
 
 # Animation node names
 var roll_node_name = "Roll"
@@ -84,7 +87,8 @@ func sprint_and_roll():
 		
 func shoot():
 	var shooting = Input.is_action_pressed("attack")
-	if shooting:
+	if shooting and time_since_last_shot >= 1 / shots_per_second:
+		time_since_last_shot = 0
 		self.scale *= scale_rate_shoot
 		
 		var camera_camera = $Camroot/h/v/Camera3D
@@ -114,10 +118,12 @@ func shoot():
 			new_mesh.scale = Vector3.ONE * 0.1
 			var level = get_node("..")
 			level.add_child(new_mesh)
+			await get_tree().create_timer(3).timeout
+			new_mesh.queue_free()
 		
 func attack1(): # If not doing other things, start attack1
 	if (idle_node_name in playback.get_current_node() or walk_node_name in playback.get_current_node()) and is_on_floor():
-		if Input.is_action_just_pressed("attack"):
+		if Input.is_action_pressed("attack"):
 			shoot()
 			if (is_attacking == false):
 				playback.travel(attack1_node_name)
@@ -152,6 +158,7 @@ func _scaled(value, scale=self.scale):
 	return scale * value
 
 func _physics_process(delta):
+	time_since_last_shot += delta
 	rollattack()
 	bigattack()
 	attack1()

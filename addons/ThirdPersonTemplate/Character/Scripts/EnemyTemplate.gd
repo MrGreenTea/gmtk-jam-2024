@@ -109,8 +109,10 @@ func get_slap_force():
 	return Vector3.ZERO
 		
 func shoot():
-	var distance_to_target = (target_location_node.global_position - self.global_position).length()
+	var direction = target_location_node.global_position - self.global_position
+	var distance_to_target = direction.length()
 	if distance_to_target < shoot_range:
+		player_mesh.rotation.y = atan2(direction.x, direction.z) - rotation.y
 		var shoot_source = weapon.global_position
 		var shoot_target = target_location_node.global_position
 		var result = collider_ray(shoot_source, shoot_target)
@@ -300,19 +302,6 @@ func _physics_process(delta):
 		angular_acceleration = 2
 	else: 
 		is_rolling = false
-	
-#	Jump input and Mechanics
-	# TODO: Jump rule
-	#if Input.is_action_just_pressed("jump") and ((is_attacking != true) and (is_rolling != true)) and is_on_floor():
-		#vertical_velocity = Vector3.UP * jump_force
-		
-	# Movement input, state and mechanics. *Note: movement stops if attacking
-	# slap when scale reaches limit
-	# TODO: direction input from chasing
-	#if (Input.is_action_pressed("forward") ||  Input.is_action_pressed("backward") ||  Input.is_action_pressed("left") ||  Input.is_action_pressed("right")):
-	direction = direction_towards_target()
-	# direction = direction.rotated(Vector3.UP, h_rot).normalized()
-		
 		
 	direction = direction_towards_target()
 	

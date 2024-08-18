@@ -1,4 +1,4 @@
-[gd_scene load_steps=32 format=3 uid="uid://osmkqqe7spxt"]
+[gd_scene load_steps=35 format=3 uid="uid://osmkqqe7spxt"]
 
 [ext_resource type="Sky" uid="uid://cbbdl23q60wak" path="res://addons/ThirdPersonTemplate/Environments/SkyBox.res" id="1_sdjog"]
 [ext_resource type="Material" uid="uid://c1u020xb37y6n" path="res://addons/ThirdPersonTemplate/Environments/Materials/Blue.material" id="2_1bjgh"]
@@ -6,22 +6,22 @@
 [ext_resource type="Shader" path="res://cel-shader-base.gdshader" id="4_kqbr2"]
 [ext_resource type="Texture2D" uid="uid://b3itydmnw8lm3" path="res://addons/ThirdPersonTemplate/Environments/Textures/Grid_01_BaseMap.png" id="5_43cb5"]
 [ext_resource type="ArrayMesh" uid="uid://dqcy1c6jjxdfr" path="res://Big_Stuff/Map_One/Map_assets/Asset_Batch_1_Final_Bread_02_low.res" id="6_2puij"]
+[ext_resource type="Script" path="res://level/scalable_rigid_body_3d.gd" id="7_7swcx"]
 [ext_resource type="ArrayMesh" uid="uid://co4ixxjg307wr" path="res://Big_Stuff/Map_One/Map_assets/Asset_Batch_1_Final_Circle_001.res" id="7_lms06"]
 [ext_resource type="ArrayMesh" uid="uid://bekucm6lnibr6" path="res://Big_Stuff/Map_One/Map_assets/Asset_Batch_1_Final_Cube_001.res" id="8_h6erm"]
 [ext_resource type="ArrayMesh" uid="uid://foy1k0k8u2bb" path="res://Big_Stuff/Map_One/Map_assets/Asset_Batch_1_Final_Cube_002.res" id="9_pyaw1"]
 [ext_resource type="ArrayMesh" uid="uid://df35mc52yg25y" path="res://Big_Stuff/Map_One/Map_assets/Asset_Batch_1_Final_Cube_003.res" id="10_i2b6x"]
 [ext_resource type="ArrayMesh" uid="uid://bnmigo8d02sty" path="res://Big_Stuff/Map_One/Map_assets/Asset_Batch_1_Final_Cube_005.res" id="11_1ivla"]
 [ext_resource type="ArrayMesh" uid="uid://tmdfui24mee7" path="res://Big_Stuff/Map_One/Map_assets/Asset_Batch_1_Final_Cube_006.res" id="12_qcp0f"]
-[ext_resource type="ArrayMesh" uid="uid://c8kiky3gyam7w" path="res://Big_Stuff/Map_One/Map_assets/Asset_Batch_1_Final_Cylinder_006.res" id="13_hlf5a"]
 [ext_resource type="ArrayMesh" uid="uid://3yp5ray6qi6q" path="res://Big_Stuff/Map_One/Map_assets/Asset_Batch_1_Final_Plane_004.res" id="14_glpyd"]
+[ext_resource type="PackedScene" uid="uid://d1is8lnvkernr" path="res://level/assets/round_cutting_board.tscn" id="15_p0853"]
 [ext_resource type="ArrayMesh" uid="uid://dxcamu03wwl7g" path="res://Big_Stuff/Map_One/Map_assets/Asset_Batch_1_Final_Plane_006.res" id="15_pblt2"]
-[ext_resource type="ArrayMesh" uid="uid://ct7r7i4vn785d" path="res://Big_Stuff/Map_One/Map_assets/Asset_Batch_1_Final_Cylinder_001.res" id="16_o3w4t"]
 [ext_resource type="ArrayMesh" uid="uid://cfa1qapgewj04" path="res://Big_Stuff/Map_One/Map_assets/Asset_Batch_1_Final_rustic wooden table.res" id="17_xvtvi"]
 [ext_resource type="ArrayMesh" uid="uid://hf1glqy2yuxp" path="res://Big_Stuff/Map_One/Map_assets/Asset_Batch_1_Final_Sphere.res" id="18_7kwby"]
 [ext_resource type="ArrayMesh" uid="uid://d0rbnpnetvphe" path="res://Big_Stuff/Map_One/Map_assets/Asset_Batch_1_Final_spoon_001.res" id="19_gid77"]
 [ext_resource type="ArrayMesh" uid="uid://cpnwsy824rwp7" path="res://Big_Stuff/Map_One/Map_assets/Asset_Batch_1_Final_spoon_003.res" id="20_hysbl"]
 [ext_resource type="ArrayMesh" uid="uid://c7y07wo3vvjnt" path="res://Big_Stuff/Map_One/Map_assets/Asset_Batch_1_Final_柱体.res" id="21_qj3ee"]
-[ext_resource type="PackedScene" uid="uid://5p4qtv48tci3" path="res://level/assets/tasse.tscn" id="22_blq37"]
+[ext_resource type="PackedScene" uid="uid://bvi20t6abjd7" path="res://level/assets/tasse.tscn" id="22_blq37"]
 [ext_resource type="PackedScene" uid="uid://42tdxgrdnhbs" path="res://enemy/spawner.tscn" id="23_r132n"]
 [ext_resource type="PackedScene" uid="uid://bujr5gkm2kok1" path="res://player/player.tscn" id="23_we2l4"]
 [ext_resource type="PackedScene" uid="uid://caaswg7q8dfl5" path="res://enemy/enemy.tscn" id="24_vdrw3"]
@@ -51,12 +51,22 @@ shader_parameter/base_texture = ExtResource("5_43cb5")
 shader_parameter/uv_scale = Vector2(5, 5)
 shader_parameter/uv_offset = Vector2(0, 0)
 
-[sub_resource type="CylinderShape3D" id="CylinderShape3D_lmuyv"]
-height = 0.54805
-radius = 2.86276
-
 [sub_resource type="BoxShape3D" id="BoxShape3D_2sqhi"]
 size = Vector3(1.51953, 0.0596714, 3.48938)
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_sk06b"]
+height = 0.767349
+radius = 0.900769
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_funi2"]
+size = Vector3(3.97299, 0.289673, 2.02917)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_lwv84"]
+size = Vector3(1, 0.761169, 2.11853)
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_3odoe"]
+radius = 0.281438
+height = 0.776028
 
 [node name="Scene" type="Node3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.116457, -4.76836e-07, 0.200546)
@@ -81,101 +91,100 @@ use_collision = true
 size = Vector3(47.5872, 0.1, 47.791)
 material = SubResource("ShaderMaterial_vbcgd")
 
-[node name="AssetBatch1FinalBread02Low" type="MeshInstance3D" parent="Level"]
-transform = Transform3D(0.999998, 0, 0, 0, 0.999998, 0, 0, 0, 0.999998, -17.0368, 16.8191, -23.8355)
-mesh = ExtResource("6_2puij")
-skeleton = NodePath("../Tisch")
-
-[node name="AssetBatch1FinalCircle001" type="MeshInstance3D" parent="Level"]
-transform = Transform3D(0.999998, 0, 0, 0, 0.999998, 0, 0, 0, 0.999998, -12.606, 16.3374, -23.5805)
-mesh = ExtResource("7_lms06")
-skeleton = NodePath("../Tisch")
-
-[node name="AssetBatch1FinalCube001" type="MeshInstance3D" parent="Level"]
-transform = Transform3D(0.999998, 0, 0, 0, 0.999998, 0, 0, 0, 0.999998, -3.95714, 16.3374, -26.0845)
-mesh = ExtResource("8_h6erm")
-skeleton = NodePath("../Tisch")
-
-[node name="AssetBatch1FinalCube002" type="MeshInstance3D" parent="Level"]
-transform = Transform3D(0.999998, 0, 0, 0, 0.999998, 0, 0, 0, 0.999998, -0.518512, 16.3374, -26.4196)
-mesh = ExtResource("9_pyaw1")
-skeleton = NodePath("../Tisch")
-
-[node name="AssetBatch1FinalCube003" type="MeshInstance3D" parent="Level"]
-transform = Transform3D(0.999998, 0, 0, 0, 0.999998, 0, 0, 0, 0.999998, -7.53405, 16.3374, -26.3469)
-mesh = ExtResource("10_i2b6x")
-skeleton = NodePath("../Tisch")
-
-[node name="AssetBatch1FinalCube005" type="MeshInstance3D" parent="Level"]
-transform = Transform3D(0.999998, 0, 0, 0, 0.999998, 0, 0, 0, 0.999998, 0.645044, 16.3374, -21.7029)
-mesh = ExtResource("11_1ivla")
-skeleton = NodePath("../Tisch")
-
-[node name="AssetBatch1FinalCube006" type="MeshInstance3D" parent="Level"]
-transform = Transform3D(0.999998, 0, 0, 0, 0.999998, 0, 0, 0, 0.999998, -10.3029, 16.2353, -20.3068)
-mesh = ExtResource("12_qcp0f")
-skeleton = NodePath("../Tisch")
-
-[node name="AssetBatch1FinalCylinder006" type="MeshInstance3D" parent="Level"]
-transform = Transform3D(0.999998, 0, 0, 0, 0.999998, 0, 0, 0, 0.999998, -10.0885, 16.3374, -27)
-mesh = ExtResource("13_hlf5a")
-skeleton = NodePath("../Tisch")
-
-[node name="AssetBatch1FinalPlane004" type="MeshInstance3D" parent="Level"]
-transform = Transform3D(0.999998, 0, 0, 0, 0.999998, 0, 0, 0, 0.999998, -4.58213, 16.3374, -23.1103)
-mesh = ExtResource("14_glpyd")
-skeleton = NodePath("../Tisch")
-
-[node name="AssetBatch1FinalPlane006" type="MeshInstance3D" parent="Level"]
-transform = Transform3D(0.999998, 0, 0, 0, 0.999998, 0, 0, 0, 0.999998, -7.74153, 16.3374, -19.2499)
-mesh = ExtResource("15_pblt2")
-skeleton = NodePath("../Tisch")
-
-[node name="Round Cutting Board" type="RigidBody3D" parent="Level"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.10211, 16.978, 27.0243)
-
-[node name="AssetBatch1FinalCylinder001" type="MeshInstance3D" parent="Level/Round Cutting Board"]
-transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, -4.76837e-07)
-mesh = ExtResource("16_o3w4t")
-skeleton = NodePath("../../AssetBatch1FinalCylinder001")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Level/Round Cutting Board"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.294701, 0)
-shape = SubResource("CylinderShape3D_lmuyv")
-
-[node name="Tisch" type="StaticBody3D" parent="Level"]
+[node name="Tisch (Floor)" type="StaticBody3D" parent="Level"]
 transform = Transform3D(18.836, 0, 0, 0, 18.836, 0, 0, 0, 18.836, -7.77623, 2.42899, 4.02878)
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Level/Tisch"]
+[node name="Tisch (Floor)" type="CollisionShape3D" parent="Level/Tisch (Floor)"]
 transform = Transform3D(0.999999, 0, 0, 0, 0.999999, 0, 0, 0, 0.999999, 0.0165257, 0.699264, 0.00803258)
 shape = SubResource("BoxShape3D_2sqhi")
 
-[node name="AssetBatch1FinalRusticWoodenTable" type="MeshInstance3D" parent="Level/Tisch"]
+[node name="AssetBatch1FinalRusticWoodenTable" type="MeshInstance3D" parent="Level/Tisch (Floor)"]
 transform = Transform3D(1.33309, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 mesh = ExtResource("17_xvtvi")
 skeleton = NodePath("../../..")
 
-[node name="AssetBatch1FinalCylinder001" type="MeshInstance3D" parent="Level"]
-transform = Transform3D(1.98104, 0, 0, 0, 1.98104, 0, 0, 0, 1.98104, -17.4521, 16.3374, -24.2031)
-mesh = ExtResource("16_o3w4t")
-skeleton = NodePath("../..")
+[node name="Bread" type="RigidBody3D" parent="Level"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -16.3073, 16.977, -22.5608)
+script = ExtResource("7_7swcx")
 
-[node name="AssetBatch1FinalSphere" type="MeshInstance3D" parent="Level"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.70818, 16.3374, -20.0177)
-mesh = ExtResource("18_7kwby")
-skeleton = NodePath("../..")
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Level/Bread"]
+transform = Transform3D(0.999998, 0, 0, 0, 0.999998, 0, 0, 0, 0.999998, 0, 0, 0)
+mesh = ExtResource("6_2puij")
+skeleton = NodePath("../../Tisch (Floor)")
 
-[node name="AssetBatch1FinalSpoon001" type="MeshInstance3D" parent="Level"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Level/Bread"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.49888, 0)
+shape = SubResource("CylinderShape3D_sk06b")
+
+[node name="Spoon" type="MeshInstance3D" parent="Level"]
+transform = Transform3D(0.999998, 0, 0, 0, 0.999998, 0, 0, 0, 0.999998, -12.606, 16.3374, -23.5805)
+mesh = ExtResource("7_lms06")
+skeleton = NodePath("../Tisch (Floor)")
+
+[node name="Container 2" type="RigidBody3D" parent="Level"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 18.0257, -3.45392)
+script = ExtResource("7_7swcx")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Level/Container 2"]
+transform = Transform3D(0.999998, 0, 0, 0, 0.999998, 0, 0, 0, 0.999998, 0, 0, 0)
+mesh = ExtResource("11_1ivla")
+skeleton = NodePath("../../Tisch (Floor)")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Level/Container 2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00547792, 0.134094, 0.00531006)
+shape = SubResource("BoxShape3D_funi2")
+
+[node name="Container 5" type="MeshInstance3D" parent="Level"]
+transform = Transform3D(0.999998, 0, 0, 0, 0.999998, 0, 0, 0, 0.999998, -3.95714, 16.3374, -26.0845)
+mesh = ExtResource("8_h6erm")
+skeleton = NodePath("../Tisch (Floor)")
+
+[node name="Container 4" type="MeshInstance3D" parent="Level"]
+transform = Transform3D(0.999998, 0, 0, 0, 0.999998, 0, 0, 0, 0.999998, -0.518512, 16.3374, -26.4196)
+mesh = ExtResource("9_pyaw1")
+skeleton = NodePath("../Tisch (Floor)")
+
+[node name="Container 3" type="MeshInstance3D" parent="Level"]
+transform = Transform3D(0.999998, 0, 0, 0, 0.999998, 0, 0, 0, 0.999998, -7.53405, 16.3374, -26.3469)
+mesh = ExtResource("10_i2b6x")
+skeleton = NodePath("../Tisch (Floor)")
+
+[node name="Apple" type="MeshInstance3D" parent="Level"]
+transform = Transform3D(0.999998, 0, 0, 0, 0.999998, 0, 0, 0, 0.999998, -10.3029, 16.2353, -20.3068)
+mesh = ExtResource("12_qcp0f")
+skeleton = NodePath("../Tisch (Floor)")
+
+[node name="Plate" type="MeshInstance3D" parent="Level"]
+transform = Transform3D(0.999998, 0, 0, 0, 0.999998, 0, 0, 0, 0.999998, -4.58213, 16.3374, -23.1103)
+mesh = ExtResource("14_glpyd")
+skeleton = NodePath("../Tisch (Floor)")
+
+[node name="Container 1" type="RigidBody3D" parent="Level"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -16.1309, 21.4239, 0)
+script = ExtResource("7_7swcx")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Level/Container 1"]
+transform = Transform3D(0.999998, 0, 0, 0, 0.999998, 0, 0, 0, 0.999998, 0, 0, 0)
+mesh = ExtResource("15_pblt2")
+skeleton = NodePath("../../Tisch (Floor)")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Level/Container 1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.072113, 0.00750735)
+shape = SubResource("BoxShape3D_lwv84")
+
+[node name="Round Cutting Board" parent="Level" instance=ExtResource("15_p0853")]
+
+[node name="Fork" type="MeshInstance3D" parent="Level"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.82603, 16.3374, -20.6317)
 mesh = ExtResource("19_gid77")
 skeleton = NodePath("../..")
 
-[node name="AssetBatch1FinalSpoon003" type="MeshInstance3D" parent="Level"]
+[node name="Knife" type="MeshInstance3D" parent="Level"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.07476, 16.3374, -18.9541)
 mesh = ExtResource("20_hysbl")
 skeleton = NodePath("../..")
 
-[node name="AssetBatch1Final柱体" type="MeshInstance3D" parent="Level"]
+[node name="Cleaver" type="MeshInstance3D" parent="Level"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -18.0319, 16.3374, -12.8312)
 mesh = ExtResource("21_qj3ee")
 skeleton = NodePath("../..")
@@ -185,6 +194,20 @@ skeleton = NodePath("../..")
 [node name="Spawner" parent="Level" instance=ExtResource("23_r132n")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.70238, 17.2981, 0.317624)
 enemy = ExtResource("24_vdrw3")
+
+[node name="Round Cutting Board2" parent="Level" instance=ExtResource("15_p0853")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -15.7111, 16.2829, -22.6034)
+
+[node name="Egg" type="RigidBody3D" parent="Level"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 20.2861, -7.78098)
+script = ExtResource("7_7swcx")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Level/Egg"]
+mesh = ExtResource("18_7kwby")
+skeleton = NodePath("../../..")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Level/Egg"]
+shape = SubResource("CapsuleShape3D_3odoe")
 
 [node name="Player" parent="." instance=ExtResource("23_we2l4")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.05418, 18.818, -15.6936)

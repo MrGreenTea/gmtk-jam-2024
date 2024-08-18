@@ -7,7 +7,6 @@ script = ExtResource("1_imhh0")
 radius = 5
 
 [node name="Spawner Timer" type="Timer" parent="."]
-wait_time = 5.0
 autostart = true
 
 [connection signal="timeout" from="Spawner Timer" to="." method="_on_spawner_timer_timeout"]

@@ -1,0 +1,21 @@
+[gd_scene load_steps=4 format=3 uid="uid://d1is8lnvkernr"]
+
+[ext_resource type="Script" path="res://level/scalable_rigid_body_3d.gd" id="1_5mx42"]
+[ext_resource type="ArrayMesh" uid="uid://ct7r7i4vn785d" path="res://Big_Stuff/Map_One/Map_assets/Asset_Batch_1_Final_Cylinder_001.res" id="1_gij83"]
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_lmuyv"]
+height = 0.54805
+radius = 2.86276
+
+[node name="Round Cutting Board" type="RigidBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.10211, 16.978, 27.0243)
+script = ExtResource("1_5mx42")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, -4.76837e-07)
+mesh = ExtResource("1_gij83")
+skeleton = NodePath("")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.294701, 0)
+shape = SubResource("CylinderShape3D_lmuyv")
