@@ -255,3 +255,12 @@ func _physics_process(delta):
 	animation_tree["parameters/conditions/IsNotRunning"] = !is_running
 	# Attacks and roll don't use these boolean conditions, instead
 	# they use "travel" or "start" to one-shot their animations.
+
+func die_and_restart():
+	$GameOver.visible = true
+	await get_tree().create_timer(3).timeout
+	get_tree().reload_current_scene()
+
+func _on_world_boundary_body_exited(body: Node3D) -> void:
+	if body == self:
+		die_and_restart()

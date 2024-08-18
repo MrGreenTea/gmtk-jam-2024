@@ -251,3 +251,5 @@ mesh = SubResource("SphereMesh_4a0dd")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="RigidBody3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.80524, 0)
 shape = SubResource("SphereShape3D_0ggqb")
+
+[connection signal="body_exited" from="WorldBoundary" to="Player" method="_on_world_boundary_body_exited"]
