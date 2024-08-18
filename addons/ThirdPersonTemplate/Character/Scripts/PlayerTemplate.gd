@@ -59,6 +59,9 @@ var acceleration = int()
 
 var prev_camera_offset = Vector3()
 
+enum WEAPON_MODE { SHRINK, GROW }
+var weapon_mode: WEAPON_MODE = WEAPON_MODE.SHRINK
+
 func _ready(): # Camera based Rotation
 	direction = Vector3.BACK.rotated(Vector3.UP, $Camroot/h.global_transform.basis.get_euler().y)
 	if animation_tree.anim_player == null:
@@ -108,7 +111,11 @@ func shoot():
 			
 			print("Hit! ", target_collider)
 			if (not "Floor" in collider_name) and target_collider is ScalableRigidBody3D:
-				target_collider._scale(0.9)
+				match weapon_mode:
+					WEAPON_MODE.SHRINK:
+						target_collider._scale(0.9)
+					WEAPON_MODE.GROW:
+						target_collider._scale(1.1)
 			elif target_collider.is_in_group("Enemies"):
 				target_collider.scale = target_collider.scale * 1.1
 				self.scale *= scale_rate_hit_enemy
@@ -160,6 +167,16 @@ func _scaled(value, scale=self.scale):
 	return scale * value
 
 func _physics_process(delta):
+	if Input.is_action_just_pressed("switch_action"):
+		if weapon_mode == WEAPON_MODE.SHRINK:
+			weapon_mode = WEAPON_MODE.GROW
+			$WeaponMode.text = "GROW"
+		elif weapon_mode == WEAPON_MODE.GROW:
+			weapon_mode = WEAPON_MODE.SHRINK
+			$WeaponMode.text = "SHRINK"
+		else:
+			print("Warning, unknown weapon mode: ", weapon_mode)
+	
 	$Health.value = hp_cur
 	if hp_cur <= 0:
 		die_and_restart()
