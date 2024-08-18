@@ -24,6 +24,10 @@ Utils="*res://utils.gd"
 
 version_control/autoload_on_startup=true
 
+[global_group]
+
+Enemies=""
+
 [input]
 
 aim={

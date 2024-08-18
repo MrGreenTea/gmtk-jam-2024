@@ -1,13 +1,14 @@
-[gd_scene load_steps=26 format=3 uid="uid://osmkqqe7spxt"]
+[gd_scene load_steps=27 format=3 uid="uid://osmkqqe7spxt"]
 
 [ext_resource type="Sky" uid="uid://cbbdl23q60wak" path="res://addons/ThirdPersonTemplate/Environments/SkyBox.res" id="2_vp21c"]
 [ext_resource type="Material" uid="uid://c1u020xb37y6n" path="res://addons/ThirdPersonTemplate/Environments/Materials/Blue.material" id="3_ugxud"]
 [ext_resource type="Shader" path="res://outline.gdshader" id="5_smt3s"]
 [ext_resource type="Material" uid="uid://bquocw2a8n271" path="res://addons/ThirdPersonTemplate/Environments/Materials/GreyGrid.material" id="6_7xeo2"]
-[ext_resource type="Material" uid="uid://binyve823fx21" path="res://level/ground_material_purple.tres" id="6_55o85"]
+[ext_resource type="Material" uid="uid://bi6x10o5kdsn2" path="res://level/ground_material_purple.tres" id="6_55o85"]
 [ext_resource type="Shader" path="res://cel-shader-base.gdshader" id="6_v1qe5"]
 [ext_resource type="Texture2D" uid="uid://b3itydmnw8lm3" path="res://addons/ThirdPersonTemplate/Environments/Textures/Grid_01_BaseMap.png" id="7_wkldu"]
 [ext_resource type="PackedScene" uid="uid://bujr5gkm2kok1" path="res://player/player.tscn" id="8_githm"]
+[ext_resource type="PackedScene" uid="uid://42tdxgrdnhbs" path="res://enemy/spawner.tscn" id="8_nsbhe"]
 [ext_resource type="PackedScene" uid="uid://caaswg7q8dfl5" path="res://enemy/enemy.tscn" id="9_kt1i0"]
 [ext_resource type="PackedScene" uid="uid://ct6t5b3wl3j5y" path="res://level/world_boundary.tscn" id="10_yb8u0"]
 [ext_resource type="PackedScene" uid="uid://dabticx6k2kol" path="res://level/scalable_rigid_body_3d.tscn" id="11_rub6x"]
@@ -213,6 +214,10 @@ operation = 2
 size = Vector3(22, 10, 14)
 material = ExtResource("6_7xeo2")
 
+[node name="Spawner" parent="Level" instance=ExtResource("8_nsbhe")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.00263, -18.5487)
+enemy = ExtResource("9_kt1i0")
+
 [node name="Player" parent="." instance=ExtResource("8_githm")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.08701, 0.301881, -13.4004)
 
@@ -220,9 +225,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.08701, 0.301881, -13.4004)
 transform = Transform3D(0.999931, 0.0117283, 0, -0.0117283, 0.999931, 0, 0, 0, 1, -11.1415, 0.19482, -22.6612)
 target_character_with_collisionshape3d = NodePath("../Player")
 world_boundary = NodePath("../WorldBoundary")
-view_range = 30
 max_scale_slap = 2
-slap_multiplier = 100
 
 [node name="WorldBoundary" parent="." instance=ExtResource("10_yb8u0")]
 

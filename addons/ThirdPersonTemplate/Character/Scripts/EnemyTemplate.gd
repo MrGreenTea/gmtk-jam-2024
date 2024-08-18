@@ -41,8 +41,8 @@ var target_ever_seen = false
 @export var dash_power = 12 # Controls roll and big attack speed boosts
 @export var view_range = 30
 @export var shoot_range = 10
-@export var max_scale_slap = 10
-@export var slap_multiplier = 1
+@export var max_scale_slap = 3
+@export var slap_multiplier = 100
 @export var slap_drag = 0.1
 
 @onready var shoot_timer = get_node("Walk With Rifle/Weapon/BulletRateTimer")
@@ -51,6 +51,9 @@ var target_ever_seen = false
 var shoot_ready = true
 var scale_slap_ready = true
 var rnd_generator = RandomNumberGenerator.new()
+
+@export var max_health = 10;
+var current_health = max_health;
 
 # Animation node names
 var roll_node_name = "Roll"
@@ -69,6 +72,8 @@ var is_attacking = bool()
 var is_rolling = bool()
 var is_walking = bool()
 var is_running = bool()
+var hit_recently = bool()
+var is_dead = bool()
 
 # Physics values
 var direction = Vector3()
@@ -82,7 +87,7 @@ var angular_acceleration = int()
 var acceleration = int()
 
 func _ready(): # Camera based Rotation
-	var player_script = get_node("PlayerTemplate")
+	# var player_script = get_node("PlayerTemplate")
 	shoot_timer.timeout.connect(_on_shoot_timer_timeout)
 	shoot_freeze_timer.timeout.connect(_on_shoot_freeze_timer_timeout)
 	scale_slap_timer.timeout.connect(_on_scale_slap_timer_timeout)
@@ -92,16 +97,16 @@ func _ready(): # Camera based Rotation
 		$TargetPosDebugMarker.visible = false
 
 func get_slap_force():
-	var slap_force = Vector3.ZERO
 	if scale_slap_ready and self.scale[0] >= max_scale_slap:
 		print("Enemy will get slapped")
 		var slap_force_base = Vector3(1, 1, 0)
-		var rnd_angle = rnd_generator.randf() * 2 * 3.14
-		slap_force = slap_force_base.rotated(Vector3.UP, rnd_angle) * self.scale
+		var rnd_angle = rnd_generator.randf() * TAU
+		var slap_force = slap_force_base.rotated(Vector3.UP, rnd_angle) * self.scale
 		slap_force *= slap_multiplier
 		scale_slap_ready = false
 		scale_slap_timer.start()
-	return slap_force
+		return slap_force
+	return Vector3.ZERO
 		
 func shoot():
 	var distance_to_target = (target_location_node.global_position - self.global_position).length()
@@ -124,7 +129,6 @@ func target_assumed_position():
 	var _target_in_range = target_in_range() 
 	var _target_not_hidden_by_object = target_not_hidden_by_object() 
 	
-	_print("In viewport: %s, In range: %s, Not hidden: %s" % [_target_in_viewport, _target_in_range, _target_not_hidden_by_object])
 	if _target_in_range and _target_in_viewport and _target_not_hidden_by_object:
 		target_ever_seen = true
 		target_last_position = target.global_position
@@ -137,6 +141,9 @@ func target_assumed_position():
 		return self.global_position
 
 func direction_towards_target():
+	if hit_recently:
+		hit_recently = false
+		return (target.global_position - self.global_position).normalized()
 	var direction = target_assumed_position() - self.global_position
 	return direction
 
@@ -245,6 +252,8 @@ func _print(str):
 		print(str)
 
 func _physics_process(delta):
+	if is_dead:
+		return
 	rollattack()
 	bigattack()
 	attack1()
@@ -298,9 +307,11 @@ func _physics_process(delta):
 		#vertical_velocity = Vector3.UP * jump_force
 		
 	# Movement input, state and mechanics. *Note: movement stops if attacking
-	
 	# slap when scale reaches limit
-
+	# TODO: direction input from chasing
+	#if (Input.is_action_pressed("forward") ||  Input.is_action_pressed("backward") ||  Input.is_action_pressed("left") ||  Input.is_action_pressed("right")):
+	direction = direction_towards_target()
+	# direction = direction.rotated(Vector3.UP, h_rot).normalized()
 		
 		
 	direction = direction_towards_target()
@@ -313,12 +324,20 @@ func _physics_process(delta):
 	else:
 		_print("Enemy walking")
 		is_walking = true
-		is_running = false
+		is_running = true
 	
 	if direction.length() < 0.1:
 		_print("Enemy at assumed target, stopping")
 		is_walking = false
+		is_running = false
 		direction = Vector3.ZERO
+	
+	if is_running:
+		movement_speed = run_speed
+	elif is_walking:
+		movement_speed = walk_speed
+	else:
+		movement_speed = 0
 	
 	#else: # Normal turn movement mechanics
 	player_mesh.rotation.y = lerp_angle(player_mesh.rotation.y, atan2(direction.x, direction.z) - rotation.y, delta * angular_acceleration)
@@ -365,3 +384,12 @@ func _physics_process(delta):
 	# they use "travel" or "start" to one-shot their animations.
 	
 	
+func hit(damage: float):
+	hit_recently = true
+	current_health = clamp(current_health - damage, 0, max_health)
+	print("Health: ", current_health, "/", max_health, " after ", damage, " damage")
+	if current_health <= 0:
+		is_dead = true
+		playback.travel("Death")
+		await get_tree().create_timer(30).timeout
+		queue_free()

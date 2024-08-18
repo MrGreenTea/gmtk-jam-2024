@@ -1,0 +1,13 @@
+[gd_scene load_steps=2 format=3 uid="uid://42tdxgrdnhbs"]
+
+[ext_resource type="Script" path="res://enemy/spawner.gd" id="1_imhh0"]
+
+[node name="Spawner" type="Node3D"]
+script = ExtResource("1_imhh0")
+radius = 5
+
+[node name="Spawner Timer" type="Timer" parent="."]
+wait_time = 5.0
+autostart = true
+
+[connection signal="timeout" from="Spawner Timer" to="." method="_on_spawner_timer_timeout"]
