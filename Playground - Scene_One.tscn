@@ -1,4 +1,4 @@
-[gd_scene load_steps=36 format=3 uid="uid://osmkqqe7spxt"]
+[gd_scene load_steps=38 format=3 uid="uid://osmkqqe7spxt"]
 
 [ext_resource type="Script" path="res://main_game.gd" id="1_mpr5p"]
 [ext_resource type="Sky" uid="uid://cbbdl23q60wak" path="res://addons/ThirdPersonTemplate/Environments/SkyBox.res" id="1_sdjog"]
@@ -68,6 +68,11 @@ size = Vector3(1, 0.761169, 2.11853)
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_3odoe"]
 radius = 0.281438
 height = 0.776028
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_fl3rj"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_eq0bx"]
+bg_color = Color(0.235846, 0.473528, 0.0604916, 1)
 
 [node name="Scene" type="Node3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.116457, -4.76836e-07, 0.200546)
@@ -214,6 +219,18 @@ shape = SubResource("CapsuleShape3D_3odoe")
 [node name="Player" parent="." instance=ExtResource("23_we2l4")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.05418, 18.818, -15.6936)
 
+[node name="Health" type="ProgressBar" parent="Player"]
+offset_left = 15.0
+offset_top = 56.0
+offset_right = 304.0
+offset_bottom = 83.0
+theme_override_styles/background = SubResource("StyleBoxFlat_fl3rj")
+theme_override_styles/fill = SubResource("StyleBoxFlat_eq0bx")
+step = 1.0
+value = 100.0
+rounded = true
+show_percentage = false
+
 [node name="WorldBoundary" parent="." instance=ExtResource("25_f48el")]
 
 [node name="SurvivalTime" type="Label" parent="."]
@@ -223,3 +240,4 @@ offset_right = 56.0
 offset_bottom = 39.0
 
 [connection signal="enemy_killed" from="." to="Player" method="_on_scene_enemy_killed"]
+[connection signal="body_exited" from="WorldBoundary" to="Player" method="_on_world_boundary_body_exited"]

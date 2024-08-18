@@ -24,7 +24,7 @@ signal target_hit(target_collider)
 @export var scale_rate = 1.01
 @export var scale_rate_shoot = 1.01
 @export var scale_rate_hit_enemy = 0.98
-@export var hp_max = 100
+@export var hp_max = 25
 @onready var hp_cur = hp_max
 @export var shots_per_second = 2
 # start with a high enough number
@@ -65,6 +65,8 @@ func _ready(): # Camera based Rotation
 		animation_tree.anim_player = player_mesh.get_node("AnimationPlayer")
 		
 	signal_handler.connect("player_shot", _on_player_shot)
+	$Health.max_value = hp_max
+	$Health.value = hp_cur
 	
 func _input(event): # All major mouse and button input events
 	if event is InputEventMouseMotion:
@@ -158,6 +160,9 @@ func _scaled(value, scale=self.scale):
 	return scale * value
 
 func _physics_process(delta):
+	$Health.value = hp_cur
+	if hp_cur <= 0:
+		die_and_restart()
 	time_since_last_shot += delta
 	rollattack()
 	bigattack()
@@ -274,6 +279,6 @@ func _on_world_boundary_body_exited(body: Node3D) -> void:
 
 
 func _on_scene_enemy_killed(enemy: Node3D) -> void:
-	if self.scale.length() > 0.5:
+	if self.scale.length() > 0.5	:
 		self.scale /= scale_rate_shoot * 3
 	self.position += Vector3.UP * 0.1
